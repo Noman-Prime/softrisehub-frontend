@@ -17,7 +17,8 @@ const Navbar = () => {
   useEffect(() => {
     const checkLogin = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/v1/user/me", { withCredentials: true })
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/v1/user/me`, { withCredentials: true })
         setUser(response.data.user)
       }
       catch (error) {
@@ -78,6 +79,8 @@ const Navbar = () => {
       toast.error(error)
     }
   }
+  console.log(user);
+  
   return (
     <>
       <div className="flex justify-center w-full items-center sticky top-0 z-[100]">
