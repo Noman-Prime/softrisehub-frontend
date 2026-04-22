@@ -69,7 +69,8 @@ const Navbar = () => {
   }
   const logout = async () => {
     try {
-      const responce = await axios.post("http://localhost:3000/api/v1/user/logout ", {}, { withCredentials: true })
+      const responce = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/v1/user/logout`, {}, { withCredentials: true })
       if (responce) {
         setUser(null)
         toast.success("Logout Successful")
