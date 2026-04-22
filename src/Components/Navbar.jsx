@@ -80,8 +80,6 @@ const Navbar = () => {
       toast.error(error)
     }
   }
-  console.log(user);
-  
   return (
     <>
       <div className="flex justify-center w-full items-center sticky top-0 z-[100]">
