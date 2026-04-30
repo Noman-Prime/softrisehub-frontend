@@ -21,7 +21,20 @@ const Projects = () => {
 
     getProjects();
 
+    // 👇 Add these debug logs
+    console.log("Socket connected:", socket.connected);
+    console.log("Socket id:", socket.id);
+
+    socket.on("connect", () => {
+        console.log("Socket connected ✅", socket.id);
+    });
+
+    socket.on("disconnect", () => {
+        console.log("Socket disconnected ❌");
+    });
+
     const handler = () => {
+        console.log("projectUpdated event received ✅"); // 👈 add this
         getProjects();
     };
 
@@ -29,6 +42,8 @@ const Projects = () => {
 
     return () => {
         socket.off(events.PROJECT_UPDATED, handler);
+        socket.off("connect");
+        socket.off("disconnect");
     };
 }, []);
 
