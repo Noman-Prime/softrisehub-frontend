@@ -14,14 +14,17 @@ import Navbar from "./Components/Navbar.jsx";
 import socket from "./socket.js";
 
 const App = () => {
-  useEffect(()=>{
-    socket.on("connect", ()=>{
-      console.log("Socket is on", socket.id);
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Socket connected:", socket.id)
     })
-    return ()=>{
+
+    return () => {
       socket.off("connect")
     }
-  },[])
+  }, [])
+
   return (
     <>
       <Navbar />
