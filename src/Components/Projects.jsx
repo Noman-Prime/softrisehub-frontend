@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import socket from "../socket";
-import events from "../Pages/events";
+import events from "../../events";
 
 const Projects = () => {
     const [projects, setProjects] = useState([]);
@@ -18,12 +18,14 @@ const Projects = () => {
                 console.error(error);
             }
         };
-        getProjects();
-        socket.on(events.PROJECT_UPDATED, getProjects)
 
-        return ()=>{
-            socket.off(events.PROJECT_UPDATED)
-        }
+        getProjects();
+
+        socket.on(events.PROJECT_UPDATED, getProjects);
+
+        return () => {
+            socket.off(events.PROJECT_UPDATED, getProjects);
+        };
     }, []);
 
     return (
