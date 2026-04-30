@@ -7,45 +7,38 @@ const Projects = () => {
     const [projects, setProjects] = useState([]);
 
     useEffect(() => {
-    const getProjects = async () => {
-        try {
-            const response = await axios.get(
-                `${import.meta.env.VITE_API_URL}/api/v1/project/all`,
-                { withCredentials: true }
-            );
-            setProjects(response.data.Projects);
-        } catch (error) {
-            console.error(error);
-        }
-    };
+        const getProjects = async () => {
+            try {
+                const response = await axios.get(
+                    `${import.meta.env.VITE_API_URL}/api/v1/project/all`,
+                    { withCredentials: true }
+                );
+                setProjects(response.data.Projects);
+            } catch (error) {
+                console.error(error);
+            }
+        };
 
-    getProjects();
-
-    // 👇 Add these debug logs
-    console.log("Socket connected:", socket.connected);
-    console.log("Socket id:", socket.id);
-
-    socket.on("connect", () => {
-        console.log("Socket connected ✅", socket.id);
-    });
-
-    socket.on("disconnect", () => {
-        console.log("Socket disconnected ❌");
-    });
-
-    const handler = () => {
-        console.log("projectUpdated event received ✅"); // 👈 add this
         getProjects();
-    };
 
-    socket.on(events.PROJECT_UPDATED, handler);
+        // ✅ re-fetch when socket connects
+        socket.on("connect", () => {
+            console.log("Socket connected ✅", socket.id);
+            getProjects(); // 👈 this is the fix
+        });
 
-    return () => {
-        socket.off(events.PROJECT_UPDATED, handler);
-        socket.off("connect");
-        socket.off("disconnect");
-    };
-}, []);
+        const handler = () => {
+            console.log("projectUpdated event received ✅");
+            getProjects();
+        };
+
+        socket.on(events.PROJECT_UPDATED, handler);
+
+        return () => {
+            socket.off(events.PROJECT_UPDATED, handler);
+            socket.off("connect");
+        };
+    }, []);
 
     return (
         <section className="py-20 bg-white">
@@ -73,7 +66,7 @@ const Projects = () => {
                                 <h3 className="text-2xl font-bold text-gray-900 mt-2 mb-4">
                                     {project?.name}
                                 </h3>
-                                
+
                                 <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">
                                     {project?.description}
                                 </span>
