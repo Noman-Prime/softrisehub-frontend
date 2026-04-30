@@ -7,26 +7,30 @@ const Projects = () => {
     const [projects, setProjects] = useState([]);
 
     useEffect(() => {
-        const getProjects = async () => {
-            try {
-                const response = await axios.get(
-                    `${import.meta.env.VITE_API_URL}/api/v1/project/all`,
-                    { withCredentials: true }
-                );
-                setProjects(response.data.Projects);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+    const getProjects = async () => {
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_API_URL}/api/v1/project/all`,
+                { withCredentials: true }
+            );
+            setProjects(response.data.Projects);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
+    getProjects();
+
+    const handler = () => {
         getProjects();
+    };
 
-        socket.on(events.PROJECT_UPDATED, getProjects);
+    socket.on(events.PROJECT_UPDATED, handler);
 
-        return () => {
-            socket.off(events.PROJECT_UPDATED, getProjects);
-        };
-    }, []);
+    return () => {
+        socket.off(events.PROJECT_UPDATED, handler);
+    };
+}, []);
 
     return (
         <section className="py-20 bg-white">
