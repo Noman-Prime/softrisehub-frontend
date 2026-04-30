@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
 import { Route, Routes } from "react-router-dom";
@@ -11,8 +11,17 @@ import Signup from "./Pages/Signup";
 import Profile from "./Components/Profile";
 import GuestLogin from "./Pages/Guestlogin.jsx";
 import Navbar from "./Components/Navbar.jsx";
+import socket from "./socket.js";
 
 const App = () => {
+  useEffect(()=>{
+    socket.on("connect", ()=>{
+      console.log("Socket is on", socket.id);
+    })
+    return ()=>{
+      socket.off("connect")
+    }
+  },[])
   return (
     <>
       <Navbar />
