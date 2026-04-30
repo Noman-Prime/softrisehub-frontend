@@ -103,14 +103,16 @@ const Navbar = () => {
           </div>
 
           <div className="flex flex-row rounded-[10px] shadow items-center justify-center px-2 py-1 sm: py-1.5 gap-3">
+            {/* 
             <div className="border rounded-full sm:flex rounded-[50px] shadow text-center bg-white px-2 py-0.5 hover:cursor-pointer hover:bg-gray-300 hover:text-blue-600 items-center gap-1">
-              <Link to="/livechat" onClick={scrollToTop} className="hidden sm:block">Discuss with Developer</Link>
-              <MessageSquare size={18} color="blue" className="w-6 h-8 rounded-full object-cover sm:hidden" />
-            </div>
+              {/* <Link to="/livechat" onClick={scrollToTop} className="hidden sm:block">Discuss with Developer</Link> */}
+              {/* <MessageSquare size={18} color="blue" className="w-6 h-8 rounded-full object-cover sm:hidden" /> */}
+            {/* </div>  */}
+  
 
             <div className="relative" ref={profileRef}>
               <div className="flex border-2 border-blue-600 rounded-full shadow hover:cursor-pointer hover:border-black" onClick={toggleProfile}>
-                <img src={user?.image?.url || "/logo.png"} alt="profile" className="w-8 h-8 rounded-full object-cover" />
+                <img src="/logo.png" alt="profile" className="w-8 h-8 rounded-full object-cover" />
 
                 {open.profile && (
                   (user ? (

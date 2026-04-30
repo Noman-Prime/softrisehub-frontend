@@ -46,15 +46,11 @@ const Login = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 items-center justify-center px-4">
       <div className="flex flex-col w-100 rounded-[24px] bg-white shadow-2xl overflow-hidden  md:flex flex-col w-full max-w-[420px] rounded-[24px] bg-white shadow-2xl overflow-hidden">
-        
-        {/* Header */}
         <div className="w-full bg-blue-900 py-8 flex flex-col items-center justify-center text-white">
           <LogIn size={32} className="mb-2 opacity-80" />
           <h2 className="font-bold text-2xl tracking-tight">Welcome Back</h2>
           <p className="text-blue-200 text-sm">Login to your SoftRiseHub account</p>
         </div>
-
-        {/* Form */}
         <div className="flex flex-col p-6 md:p-8 space-y-5">
           <div className="space-y-1">
             <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1"> Email Address </label>
