@@ -33,7 +33,7 @@ const Login = () => {
         navigate("/developer/dashboard");
       } else if (userRole === "Admin") {
         toast.success("Welcome Back!");
-        navigate("/admin/dashbord");
+        navigate("/admindashboard");
       } else {
         toast.success("Login Successful!");
         navigate("/");
