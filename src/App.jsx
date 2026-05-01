@@ -12,6 +12,7 @@ import Profile from "./Components/Profile";
 import GuestLogin from "./Pages/Guestlogin.jsx";
 import Navbar from "./Components/Navbar.jsx";
 import socket from "./socket.js";
+import AdminDashboard from "./Pages/Admindashbord.jsx";
 
 const App = () => {
 
@@ -38,6 +39,7 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/me" element={<Profile />} />
         <Route path="/guest/login" element={<GuestLogin />} />
+        <Route path="/admindashboard" element = {<AdminDashboard />} />
       </Routes>
     </>
   )
