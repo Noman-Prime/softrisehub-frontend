@@ -13,6 +13,7 @@ import GuestLogin from "./Pages/Guestlogin.jsx";
 import Navbar from "./Components/Navbar.jsx";
 import socket from "./socket.js";
 import AdminDashboard from "./Pages/Admindashbord.jsx";
+import ProjectView from "./Components/ProjectView.jsx";
 
 const App = () => {
 
@@ -32,7 +33,8 @@ const App = () => {
       <ToastContainer position="top-right" autoClose={1000} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Project />} />
+        <Route path="/projects" element={<Project />} />
+        <Route path="/projectview/:id" element={<ProjectView />} />
         <Route path="/services" element={<Service />} />
         <Route path="/Q&A" element={<FAQ />} />
         <Route path="/login" element={<Login />} />

@@ -1,211 +1,211 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import socket from "../socket";
+import events from "../../events";
+import { Link } from "react-router-dom";
+
+// React Icons
+import { FiUsers, FiGrid, FiClock, FiCheckCircle } from "react-icons/fi";
+import { MdOutlinePendingActions } from "react-icons/md";
+import { BsFillLightningChargeFill } from "react-icons/bs";
 
 const AdminDashboard = () => {
-    const [users, setUsers] = useState(null)
-    const [projects, setProjects] = useState(null)
-    const [orders, setOrders] = useState(null)
-    const [length, setLength] = useState(null)
+    const [users, setUsers] = useState([]);
+    const [projects, setProjects] = useState([]);
+    const [view, setView] = useState("users");
+    const [stats, setStats] = useState({});
+
+    const fetchData = async (type) => {
+        try {
+            if (type === "users") {
+                const res = await axios.get(
+                    `${import.meta.env.VITE_API_URL}/api/v1/user/admin/users`,
+                    { withCredentials: true }
+                );
+
+                setUsers(res.data.users);
+                setStats(res.data);
+                setView("users");
+            }
+
+            if (type === "projects") {
+                const res = await axios.get(
+                    `${import.meta.env.VITE_API_URL}/api/v1/project/all`,
+                    { withCredentials: true }
+                );
+
+                setProjects(res.data.Projects);
+                setStats(res.data);
+                setView("projects");
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     useEffect(() => {
-        showUser()
-    }, [])
+        fetchData("users");
+    }, []);
 
-    const showUser = async () => {
-        try {
-            const userResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/user/admin/users`, { withCredentials: true })
-            console.log(userResponse.data)
-            setLength(userResponse.data)
-            setUsers(userResponse.data.users)
-            setProjects(null)
-            setOrders(null)
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    useEffect(() => {
+        const refresh = () => {
+            if (view === "users") fetchData("users");
+            if (view === "projects") fetchData("projects");
+        };
 
-    const showProjects = async () => {
-        try {
-            const projectResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/project/all`, { withCredentials: true })
-            console.log(projectResponse.data)
-            setLength(projectResponse.data)
-            setProjects(projectResponse.data.Projects)
-            setUsers(null)
-            setOrders(null)
-        } catch (error) {
-            console.error(error);
-        }
-    }
+        socket.on(events.PROJECT_UPDATED, refresh);
+        socket.on("connect", refresh);
+
+        return () => {
+            socket.off(events.PROJECT_UPDATED, refresh);
+            socket.off("connect", refresh);
+        };
+    }, [view]);
 
     return (
-        <>
-            <div className="flex bg-gray-30 my-2 mx-2  bg-black gap-1">
-                <div className="flex flex-col bg-white border rounded-[10px]  w-30 h-screen">
-                    <div className="flex flex-col items-enter justify-centert my-2 mx-1 gap-2">
-                        <button className="flex text-center font-bold justify-center border-2 rounded-[10px] " onClick={showUser}>Users</button>
-                        <button className="flex text-center font-bold justify-center border-2 rounded-[10px] " onClick={showProjects}>Projectts</button>
-                        <button className="flex text-center font-bold justify-center border-2 rounded-[10px] ">orders</button>
-                    </div>
-                </div>
-                <div className="w-full h-screen bg-gray-400 border rounded-[10px] p-4 overflow-y-auto">
-                    {users && (
-                        <div className="p-4 space-y-6">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                <div className="bg-white border rounded-xl shadow p-4 flex items-center justify-center font-semibold gap-1">
-                                    <span className="text-blue-500 font-bold">Total Accounts: </span> {length.Total}
-                                </div>
+        <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
 
-                                <div className="bg-white border rounded-xl shadow p-4 flex items-center justify-center font-semibold gap-1">
-                                    <span className="text-blue-500 font-bold">Admins: </span> {length.Admin}
-                                </div>
+            {/* SIDEBAR */}
+            <div className="w-64 bg-white/70 backdrop-blur-xl border-r border-slate-200 p-5">
+                <h1 className="text-lg font-black text-slate-900 mb-6">
+                    Admin Panel
+                </h1>
 
-                                <div className="bg-white border rounded-xl shadow p-4 flex items-center justify-center font-semibold gap-1">
-                                    <span className="text-blue-500 font-bold">Developers: </span> {length.Developer}
-                                </div>
+                <div className="flex flex-col gap-3">
 
-                                <div className="bg-white border rounded-xl shadow p-4 flex items-center justify-center font-semibold gap-1">
-                                    <span className="text-green-500 font-bold">Active User: </span> {length.User}
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                {users.map((user) => (
-                                    <div
-                                        key={user._id}
-                                        className="bg-white rounded-2xl shadow p-5 hover:shadow-lg transition"
-                                    >
-                                        <div className="flex justify-center mb-4">
-                                            <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-xl font-bold text-blue-600">
-                                                <img src={user.image?.url} alt={user.firstName?.[0]?.toUpperCase()} className="w-16 h-16 rounded-full object-cover"/>
-                                            </div>
-                                        </div>
-                                        <div className="text-center">
-                                            <h2 className="text-lg font-semibold">{user.name}</h2>
-                                            <p className="text-sm text-gray-500">{user.email}</p>
-                                        </div>
-                                        <div className="flex justify-between mt-4 text-sm">
-                                            <span className="px-2 py-1 bg-gray-200 rounded-lg">
-                                                {user.role || "User"}
-                                            </span>
+                    <button
+                        onClick={() => fetchData("users")}
+                        className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition
+                        ${view === "users"
+                                ? "bg-blue-600 text-white"
+                                : "bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+                            }`}
+                    >
+                        <FiUsers /> Users
+                    </button>
 
-                                            <span className="px-2 py-1 bg-green-500 text-white rounded-lg">
-                                                Active
-                                            </span>
-                                        </div>
-                                        <div className="flex gap-2 mt-4">
-                                            <button className="flex-1 bg-yellow-400 py-1 rounded-lg text-sm">
-                                                Edit
-                                            </button>
-                                            <button className="flex-1 bg-red-500 text-white py-1 rounded-lg text-sm">
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-
-                    )}
-
-                    {projects && (
-                        <div className="p-4 space-y-6">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                <div className="bg-white border rounded-xl shadow p-4 flex items-center justify-center font-semibold gap-1">
-                                    <span className="text-blue-500 font-bold">Total Projects: </span> {length.Total}
-                                </div>
-
-                                <div className="bg-white border rounded-xl shadow p-4 flex items-center justify-center font-semibold gap-1">
-                                    <span className="text-blue-500 font-bold">Complete Projects: </span> {length.Completed}
-                                </div>
-
-                                <div className="bg-white border rounded-xl shadow p-4 flex items-center justify-center font-semibold gap-1">
-                                    <span className="text-blue-500 font-bold">Develping Projects: </span> {length.Building}
-                                </div>
-
-                                <div className="bg-white border rounded-xl shadow p-4 flex items-center justify-center font-semibold gap-1">
-                                    <span className="text-blue-500 font-bold">Pending Projects: </span> {length.Pending}
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                {projects.map((project) => (
-                                    <div
-                                        key={project._id}
-                                        className="bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden"
-                                    >
-                                        <div className="w-full h-40 bg-gray-200">
-                                            {project.images?.length > 0 ? (
-                                                <img
-                                                    src={project.images[0].url}
-                                                    alt={project.name}
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-gray-500">
-                                                    No Image
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className="p-4">
-                                            <h2 className="text-lg font-bold text-gray-800">
-                                                {project.name}
-                                            </h2>
-
-                                            <p className="text-sm text-gray-500 mt-1 line-clamp-2">
-                                                {project.description || "No description available"}
-                                            </p>
-
-                                            <div className="flex justify-between text-xs text-gray-500 mt-3">
-                                                <span>Start: {project.startingDate || "N/A"}</span>
-                                                <span>End: {project.endDate || "N/A"}</span>
-                                            </div>
-
-                                            <div className="flex gap-3 mt-4 text-sm">
-                                                {project.gitHubLink && (
-                                                    <a
-                                                        href={project.gitHubLink}
-                                                        target="_blank"
-                                                        rel="noreferrer"
-                                                        className="text-blue-600 font-medium"
-                                                    >
-                                                        GitHub
-                                                    </a>
-                                                )}
-
-                                                {project.liveLink && (
-                                                    <a
-                                                        href={project.liveLink}
-                                                        target="_blank"
-                                                        rel="noreferrer"
-                                                        className="text-green-600 font-medium"
-                                                    >
-                                                        Live
-                                                    </a>
-                                                )}
-                                            </div>
-
-                                            {project.images?.length > 1 && (
-                                                <div className="flex gap-2 mt-3">
-                                                    {project.images.slice(1, 3).map((img, index) => (
-                                                        <img
-                                                            key={img.public_id || index}
-                                                            src={img.url}
-                                                            className="w-12 h-12 object-cover rounded-md"
-                                                        />
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
+                    <button
+                        onClick={() => fetchData("projects")}
+                        className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition
+                        ${view === "projects"
+                                ? "bg-blue-600 text-white"
+                                : "bg-slate-50 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+                            }`}
+                    >
+                        <FiGrid /> Projects
+                    </button>
 
                 </div>
             </div>
-        </>
-    );
-}
 
-export default AdminDashboard
+            {/* MAIN */}
+            <div className="flex-1 p-8 overflow-y-auto">
+
+                {/* USERS */}
+                {view === "users" && (
+                    <div className="space-y-8">
+
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <Stat icon={<FiUsers />} label="Total" value={stats.Total} />
+                            <Stat icon={<FiCheckCircle />} label="Admins" value={stats.Admin} />
+                            <Stat icon={<BsFillLightningChargeFill />} label="Developers" value={stats.Developer} />
+                            <Stat icon={<FiUsers />} label="Users" value={stats.User} />
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {users.map((user) => (
+                                <div key={user._id} className="bg-white rounded-2xl p-5 shadow hover:shadow-xl transition">
+                                    <img
+                                        src={user.image?.url}
+                                        className="w-16 h-16 mx-auto rounded-full object-cover"
+                                    />
+                                    <h2 className="text-center font-bold mt-3">{user.name}</h2>
+                                    <p className="text-center text-xs text-gray-500">{user.email}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* PROJECTS */}
+                {view === "projects" && (
+                    <div className="space-y-10">
+
+                        {/* STATS */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <Stat icon={<FiGrid />} label="Total" value={stats.Total} />
+                            <Stat icon={<FiCheckCircle />} label="Completed" value={stats.Completed} />
+                            <Stat icon={<FiClock />} label="Building" value={stats.Building} />
+                            <Stat icon={<MdOutlinePendingActions />} label="Pending" value={stats.Pending} />
+                        </div>
+
+                        {/* PROJECT CARDS */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
+
+                            {projects.map((p) => (
+                                <Link
+                                    to={`/projectview/${p._id}`}
+                                    key={p._id}
+                                    className="group bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                                >
+
+                                    {/* IMAGE */}
+                                    <div className="relative h-44 overflow-hidden">
+                                        <img
+                                            src={p.images?.[0]?.url}
+                                            className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                                        />
+
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+
+                                        <div className="absolute top-3 left-3">
+                                            <span className={`text-[10px] px-3 py-1 rounded-full text-white font-semibold
+                                                ${p.endDate ? "bg-green-500" : "bg-yellow-500"}`}>
+                                                {p.endDate ? "Completed" : "In Progress"}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* CONTENT */}
+                                    <div className="p-5 space-y-2">
+
+                                        <h2 className="font-bold text-slate-900 group-hover:text-blue-600 transition">
+                                            {p.name}
+                                        </h2>
+
+                                        <p className="text-xs text-slate-500 line-clamp-2">
+                                            {p.description}
+                                        </p>
+
+                                        <div className="flex justify-between text-[11px] text-slate-400 pt-3 border-t">
+                                            <span>{p.startingDate || "N/A"}</span>
+                                            <span>{p.endDate || "N/A"}</span>
+                                        </div>
+
+                                    </div>
+
+                                </Link>
+                            ))}
+
+                        </div>
+
+                    </div>
+                )}
+
+            </div>
+        </div>
+    );
+};
+
+/* STAT COMPONENT */
+const Stat = ({ icon, label, value }) => (
+    <div className="bg-white rounded-xl p-4 shadow-sm border flex items-center gap-3">
+        <div className="text-blue-600 text-xl">{icon}</div>
+        <div>
+            <p className="text-xs text-gray-400">{label}</p>
+            <p className="text-xl font-black text-slate-900">{value}</p>
+        </div>
+    </div>
+);
+
+export default AdminDashboard;
