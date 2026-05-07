@@ -21,8 +21,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/me" element={<Profile />} />
-        {/* Temporarily comment this out or point to a valid frontend page */}
-        {/* <Route path="/plans" element={<Plans />} /> */}
+        <Route path="/plans" element={<Plans />} />
       </Routes>
     </>
   );
