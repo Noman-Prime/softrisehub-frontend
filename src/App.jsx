@@ -7,7 +7,6 @@ import Service from "./Pages/Service";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import Profile from "./Components/Profile";
-import ProjectView from "./Components/ProjectView";
 import Packages from "./Pages/Packages";
 
 const App = () => {
@@ -21,8 +20,7 @@ const App = () => {
         <Route path="/services" element={<Service />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/me" element={<Profile />} />
-        <Route path="/plans" element={<Packages />} />
+        <Route path="/packages" element={<Packages />} />
       </Routes>
     </>
   );
