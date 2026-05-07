@@ -1,49 +1,31 @@
-import React, { useEffect } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"
-import { Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import { Routes, Route } from "react-router-dom";
+
 import Home from "./Pages/Home";
-import FAQ from "./Pages/Questionandanswer";
 import Project from "./Pages/Product";
 import Service from "./Pages/Service";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import Profile from "./Components/Profile";
-import GuestLogin from "./Pages/Guestlogin.jsx";
-import Navbar from "./Components/Navbar.jsx";
-import socket from "./socket.js";
-import AdminDashboard from "./Pages/Admindashbord.jsx";
-import ProjectView from "./Components/ProjectView.jsx";
+import ProjectView from "./Components/ProjectView";
 
 const App = () => {
-
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Socket connected:", socket.id)
-    })
-
-    return () => {
-      socket.off("connect")
-    }
-  }, [])
-
   return (
     <>
       <Navbar />
-      <ToastContainer position="top-right" autoClose={1000} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/projects" element={<Project />} />
         <Route path="/projectview/:id" element={<ProjectView />} />
         <Route path="/services" element={<Service />} />
-        <Route path="/Q&A" element={<FAQ />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/me" element={<Profile />} />
-        <Route path="/guest/login" element={<GuestLogin />} />
-        <Route path="/admindashboard" element = {<AdminDashboard />} />
+        {/* Temporarily comment this out or point to a valid frontend page */}
+        {/* <Route path="/plans" element={<Plans />} /> */}
       </Routes>
     </>
-  )
-}
-export default App
+  );
+};
+
+export default App;

@@ -41,7 +41,7 @@ const FinalCTA = () => {
                             <span className="relative flex items-center gap-2">
                                 Start a Project
                                 <span className="group-hover:translate-x-1 transition">
-                                    →
+                                    
                                 </span>
                             </span>
                         </button>
