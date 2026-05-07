@@ -8,6 +8,7 @@ import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import Profile from "./Components/Profile";
 import ProjectView from "./Components/ProjectView";
+import Packages from "./Pages/Packages";
 
 const App = () => {
   return (
@@ -21,7 +22,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/me" element={<Profile />} />
-        <Route path="/plans" element={<Plans />} />
+        <Route path="/plans" element={<Packages />} />
       </Routes>
     </>
   );
