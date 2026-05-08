@@ -2,103 +2,106 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const Packages = () => {
-    const [packages, setPackages] = useState([]);
-    const [loading, setLoading] = useState(true);
+  const [packages, setPackages] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    const fetchPackages = async () => {
-        try {
-            const { data } = await axios.get(
-                `${import.meta.env.VITE_API_URL}/api/v1/package/findAll`,
-                { withCredentials: true }
-            );
+  const API = import.meta.env.VITE_API_URL;
 
-            setPackages(data.packages || []);
-        } catch (error) {
-            console.log("Fetch Error:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+  const fetchPackages = async () => {
+    try {
+      setLoading(true);
 
-    useEffect(() => {
-        fetchPackages();
-    }, []);
+      const { data } = await axios.get(
+        `${API}/api/v1/package/findAll`,
+        { withCredentials: true }
+      );
 
-    return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white p-8">
+      console.log("📦 PACKAGES RESPONSE:", data);
 
-            {/* Header */}
-            <div className="text-center mb-12">
-                <h1 className="text-4xl font-bold text-sky-400">
-                    Choose Your Package
-                </h1>
-                <p className="text-slate-400 mt-2">
-                    Select the perfect plan for your project
-                </p>
+      setPackages(data.packages || []);
+
+    } catch (error) {
+      console.log("❌ PACKAGES ERROR:", error?.response?.data || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPackages();
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-[#050814] text-white p-8">
+
+      {/* HEADER */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-sky-400">
+          Our Packages
+        </h1>
+        <p className="text-white/50 mt-2">
+          Choose the perfect plan for your needs
+        </p>
+      </div>
+
+      {/* LOADING */}
+      {loading ? (
+        <p className="text-center text-white/50">
+          Loading packages...
+        </p>
+      ) : packages.length === 0 ? (
+        <p className="text-center text-white/50">
+          No packages available
+        </p>
+      ) : (
+        <div className="grid md:grid-cols-3 gap-8">
+
+          {packages.map((pkg) => (
+            <div
+              key={pkg._id}
+              className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-sky-500 transition"
+            >
+
+              {/* TYPE */}
+              <p className="text-xs text-sky-400 font-bold uppercase">
+                {pkg.type}
+              </p>
+
+              {/* NAME */}
+              <h2 className="text-xl font-bold mt-2">
+                {pkg.name}
+              </h2>
+
+              {/* PRICE */}
+              <p className="text-2xl font-bold text-sky-400 mt-2">
+                ${pkg.price}
+              </p>
+
+              {/* DETAILS */}
+              <p className="text-sm text-white/60 mt-3">
+                {pkg.details}
+              </p>
+
+              {/* FEATURES */}
+              <div className="mt-4 text-xs text-white/50 space-y-1">
+                <p>📄 Pages: {pkg.pages}</p>
+                <p>⏱ Timeline: {pkg.timeline}</p>
+                <p>🔁 Revisions: {pkg.revision}</p>
+              </div>
+
+              {/* BUTTON */}
+              <button className="mt-6 w-full py-2 rounded-xl bg-sky-500 text-black font-semibold hover:bg-sky-400 transition">
+                Select Plan
+              </button>
+
             </div>
+          ))}
 
-            {/* Loading */}
-            {loading ? (
-                <p className="text-center text-slate-400">
-                    Loading packages...
-                </p>
-            ) : packages.length === 0 ? (
-                <p className="text-center text-slate-400">
-                    No packages found
-                </p>
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-                    {packages.map((pkg) => (
-                        <div
-                            key={pkg._id}
-                            className="group relative bg-slate-900 border border-slate-800 rounded-3xl p-6 hover:border-sky-500 hover:shadow-2xl hover:shadow-sky-500/10 transition-all duration-300"
-                        >
-
-                            {/* Glow Effect */}
-                            <div className="absolute inset-0 rounded-3xl bg-sky-500/5 opacity-0 group-hover:opacity-100 transition"></div>
-
-                            <div className="relative z-10">
-
-                                {/* Title */}
-                                <h2 className="text-2xl font-bold text-white">
-                                    {pkg.name}
-                                </h2>
-
-                                <p className="text-sky-400 mt-1 font-medium">
-                                    {pkg.type}
-                                </p>
-
-                                {/* Features */}
-                                <div className="mt-5 space-y-2 text-sm text-slate-300">
-                                    <p>📄 Pages: {pkg.pages}</p>
-                                    <p>⏱ Timeline: {pkg.timeline}</p>
-                                    <p>🔁 Revisions: {pkg.revision}</p>
-                                </div>
-
-                                {/* Details */}
-                                <p className="mt-4 text-slate-400 text-sm line-clamp-3">
-                                    {pkg.details}
-                                </p>
-
-                                {/* Price */}
-                                <div className="mt-6 text-3xl font-bold text-sky-400">
-                                    ${pkg.price}
-                                </div>
-
-                                {/* Button */}
-                                <button className="mt-6 w-full py-3 rounded-xl bg-sky-500 text-black font-semibold hover:bg-sky-400 hover:scale-[1.02] transition-all duration-300">
-                                    Select This Package
-                                </button>
-
-                            </div>
-                        </div>
-                    ))}
-
-                </div>
-            )}
         </div>
-    );
+      )}
+
+    </div>
+  );
 };
 
 export default Packages;

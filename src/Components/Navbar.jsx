@@ -1,246 +1,219 @@
 import {
-  MoreVertical,
-  LogIn,
-  UserPlus,
-  Home,
-  Package,
-  Settings,
   LogOut,
   CircleUser,
-  ArrowRight,
   ChevronDown,
-  LayoutGrid,
-  Zap
+  Menu,
+  X
 } from "lucide-react";
+
 import { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Navbar = () => {
-  // --- KEEPING YOUR LOGIC EXACTLY AS IS ---
   const [user, setUser] = useState(null);
-  const profileRef = useRef(null);
-  const mobileRef = useRef(null);
+  const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const [open, setOpen] = useState({
-    profile: false,
-    mobile: false,
-  });
+  const profileRef = useRef(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/v1/user/me`,
+        { withCredentials: true }
+      );
+      setUser(res.data.user || null);
+    } catch {
+      setUser(null);
+    }
+  };
 
   useEffect(() => {
-    const checkLogin = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/v1/user/me`,
-          { withCredentials: true }
-        );
-        setUser(response.data.user);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    checkLogin();
+    fetchUser();
+  }, [location.pathname]);
 
+  useEffect(() => {
     const handleClick = (e) => {
       if (profileRef.current && !profileRef.current.contains(e.target)) {
-        setOpen((pre) => ({ ...pre, profile: false }));
-      }
-      if (mobileRef.current && !mobileRef.current.contains(e.target)) {
-        setOpen((pre) => ({ ...pre, mobile: false }));
+        setOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    window.addEventListener("auth-change", fetchUser);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      window.removeEventListener("auth-change", fetchUser);
+    };
   }, []);
-
-  const toggleProfile = () =>
-    setOpen((pre) => ({ ...pre, profile: !pre.profile }));
-
-  const toggleMobile = () =>
-    setOpen((pre) => ({ ...pre, mobile: !pre.mobile }));
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setOpen({ profile: false, mobile: false });
-  };
 
   const logout = async () => {
     try {
-      const response = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_API_URL}/api/v1/user/logout`,
         {},
         { withCredentials: true }
       );
-      if (response) {
-        setUser(null);
-        toast.success("Logout Successful");
-        scrollToTop();
-      }
-    } catch (error) {
-      toast.error(error.message);
+
+      setUser(null);
+      toast.success("Logged out");
+      window.dispatchEvent(new Event("auth-change"));
+      navigate("/");
+    } catch {
+      toast.error("Logout failed");
     }
   };
 
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Projects", path: "/projects" },
+    { name: "Services", path: "/services" },
+    { name: "Packages", path: "/packages" },
+    { name: "About", path: "/about" }
+  ];
+
   return (
-  <header className="sticky top-0 z-[100] bg-white/60 backdrop-blur-3xl border-b border-slate-200/30">
+    <header className="sticky top-0 z-50 bg-[#050814]/80 backdrop-blur-2xl border-b border-white/10">
 
-    {/* subtle top glow line */}
-    <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"></div>
+      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
 
-    <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-20">
+        {/* BRAND */}
+        <Link to="/" className="flex items-center gap-3 shrink-0">
 
-      {/* LEFT BRAND */}
-      <div className="flex items-center gap-10">
-
-        <Link
-          to="/"
-          onClick={scrollToTop}
-          className="flex items-center gap-3 group"
-        >
-
-          {/* logo container upgrade */}
-          <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center text-white font-black shadow-lg group-hover:scale-105 transition">
-
-            <span className="z-10">S</span>
-
-            {/* glow */}
-            <div className="absolute inset-0 rounded-2xl bg-blue-500/20 blur-xl opacity-0 group-hover:opacity-100 transition"></div>
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold">
+            S
           </div>
 
           <div className="flex flex-col">
-            <span className="text-slate-900 font-black text-xl leading-none tracking-tight group-hover:text-blue-600 transition">
-              SoftRise<span className="text-blue-600">Hub</span>
+            <span className="text-white font-bold text-lg leading-none">
+              SoftRise<span className="text-blue-400">Hub</span>
             </span>
-
-            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.3em] mt-1">
+            <span className="text-[10px] text-white/40 tracking-[0.25em] uppercase">
               SaaS Platform
             </span>
           </div>
 
         </Link>
 
-        {/* NAV */}
-        <nav className="hidden lg:flex items-center gap-2">
-
-          {[
-            { name: "Home", path: "/" },
-            { name: "Projects", path: "/projects" },
-            { name: "Services", path: "/services" }
-          ].map((item) => (
+        {/* DESKTOP NAV */}
+        <nav className="hidden md:flex items-center gap-8 text-sm text-white/60">
+          {navLinks.map((item) => (
             <Link
               key={item.name}
               to={item.path}
-              className="relative px-4 py-2 text-sm font-semibold text-slate-500 hover:text-slate-900 rounded-xl transition group"
+              className="hover:text-white transition"
             >
               {item.name}
-
-              {/* animated underline */}
-              <span className="absolute left-1/2 -translate-x-1/2 bottom-0 w-0 h-[2px] bg-blue-600 group-hover:w-4/5 transition-all duration-300"></span>
             </Link>
           ))}
-
         </nav>
-      </div>
 
-      {/* RIGHT SIDE */}
-      <div className="flex items-center gap-4">
+        {/* RIGHT SIDE */}
+        <div className="flex items-center gap-4">
 
-        {!user ? (
-          <div className="hidden sm:flex items-center gap-3">
+          {/* MOBILE TOGGLE */}
+          <button
+            className="md:hidden text-white"
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
+            {mobileOpen ? <X /> : <Menu />}
+          </button>
 
-            <Link
-              to="/login"
-              className="text-sm font-semibold text-slate-500 hover:text-slate-900 px-4 py-2 rounded-xl hover:bg-slate-100 transition"
-            >
-              Sign in
-            </Link>
+          {!user ? (
+            <div className="hidden md:flex items-center gap-3">
+              <Link to="/login" className="text-white/70 hover:text-white text-sm">
+                Sign in
+              </Link>
 
-            <Link
-              to="/signup"
-              className="relative overflow-hidden flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-semibold text-white bg-slate-900 hover:bg-blue-600 transition shadow-lg hover:shadow-blue-200"
-            >
-              Get Started <ArrowRight size={16} />
-
-              {/* shine effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition duration-700"></div>
-            </Link>
-
-          </div>
-        ) : (
-          <div className="relative flex items-center gap-4" ref={profileRef}>
-
-            {/* status pill upgraded */}
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-              <span className="text-[10px] font-semibold text-slate-500 tracking-widest uppercase">
-                Live
-              </span>
+              <Link
+                to="/signup"
+                className="px-5 py-2 rounded-xl bg-blue-600 text-white text-sm hover:bg-blue-500 transition"
+              >
+                Get Started
+              </Link>
             </div>
+          ) : (
+            <div className="relative" ref={profileRef}>
 
-            {/* profile button premium */}
-            <button
-              onClick={toggleProfile}
-              className="flex items-center gap-2 px-2 py-1.5 rounded-2xl border border-slate-200 bg-white hover:shadow-lg hover:border-blue-300 transition"
-            >
-              <div className="w-9 h-9 rounded-xl overflow-hidden">
-                <img src="/logo.png" className="w-full h-full object-cover" />
-              </div>
+              <button
+                onClick={() => setOpen(!open)}
+                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition"
+              >
+                <img
+                  src={user?.image?.url || "/logo.png"}
+                  className="w-8 h-8 rounded-lg object-cover"
+                />
 
-              <ChevronDown
-                size={14}
-                className={`text-slate-400 transition-transform ${open.profile ? "rotate-180" : ""}`}
-              />
-            </button>
+                <ChevronDown
+                  size={14}
+                  className={`text-white/60 transition ${open ? "rotate-180" : ""}`}
+                />
+              </button>
 
-            {/* dropdown premium feel */}
-            {open.profile && (
-              <div className="absolute right-0 top-full mt-4 w-64 bg-white/95 backdrop-blur-2xl border border-slate-100 rounded-3xl shadow-2xl p-3">
+              {open && (
+                <div className="absolute right-0 mt-3 w-56 bg-[#0B0F19] border border-white/10 rounded-2xl p-3 shadow-2xl">
 
-                <div className="px-4 py-4 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-100 mb-2">
-                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
-                    Signed in
-                  </p>
-                  <p className="text-sm font-bold text-slate-900">
-                    {user.firstName} {user.lastName}
-                  </p>
+                  <div className="px-3 py-3 border-b border-white/10 mb-2">
+                    <p className="text-white text-sm font-semibold">
+                      {user.firstName} {user.lastName}
+                    </p>
+                    <p className="text-white/40 text-xs">{user.role}</p>
+                  </div>
+
+                  {/* 🔥 FIXED PROFILE ROUTE WITH ID */}
+                  <Link
+                    to={`/users/${user._id}`}
+                    className="flex items-center gap-2 px-3 py-2 text-white/70 hover:text-white rounded-lg hover:bg-white/5"
+                    onClick={() => setOpen(false)}
+                  >
+                    <CircleUser size={16} /> Profile
+                  </Link>
+
+                  <button
+                    onClick={logout}
+                    className="flex items-center gap-2 w-full px-3 py-2 text-red-400 hover:bg-red-500/10 rounded-lg"
+                  >
+                    <LogOut size={16} /> Logout
+                  </button>
+
                 </div>
+              )}
 
-                <Link
-                  to="/me"
-                  className="flex items-center gap-3 px-3 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50 rounded-xl transition"
-                >
-                  <CircleUser size={18} />
-                  Account
-                </Link>
+            </div>
+          )}
 
-                <button
-                  onClick={logout}
-                  className="flex items-center gap-3 w-full px-3 py-3 text-sm font-semibold text-red-500 hover:bg-red-50 rounded-xl transition"
-                >
-                  <LogOut size={18} />
-                  Logout
-                </button>
+        </div>
+      </div>
 
-              </div>
-            )}
+      {/* MOBILE MENU */}
+      {mobileOpen && (
+        <div className="md:hidden px-6 pb-5 bg-[#050814] border-t border-white/10">
+
+          <div className="flex flex-col gap-4 text-white/70 text-sm mt-4">
+
+            {navLinks.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                onClick={() => setMobileOpen(false)}
+                className="hover:text-white transition"
+              >
+                {item.name}
+              </Link>
+            ))}
 
           </div>
-        )}
 
-        {/* mobile */}
-        <button
-          onClick={toggleMobile}
-          className="lg:hidden p-3 rounded-2xl bg-slate-100 hover:bg-slate-200 transition"
-        >
-          <MoreVertical size={20} />
-        </button>
+        </div>
+      )}
 
-      </div>
-    </div>
-  </header>
-);
+    </header>
+  );
 };
 
 export default Navbar;

@@ -1,106 +1,133 @@
-import { useState } from "react"; 
-import { Link, useNavigate } from "react-router-dom"; 
-import axios from "axios"; 
-import { toast } from "react-toastify"; 
-import { LogIn } from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { LogIn, Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({ 
-    email: "", 
-    password: "" 
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
   });
 
   const handleChange = (e) => {
-    setFormData({ 
-      ...formData, 
-      [e.target.name]: e.target.value 
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
     });
   };
 
   const submit = async () => {
     try {
-      const response = await axios.post(
+      const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/v1/user/login`,
         formData,
         { withCredentials: true }
       );
-      const userRole = response.data.user?.role
 
-      if (userRole === "Developer") {
-        toast.success("Welcome Back!");
-        navigate("/developer/dashboard");
-      } else if (userRole === "Admin") {
-        toast.success("Welcome Back!");
-        navigate("/admindashboard");
-      } else {
-        toast.success("Login Successful!");
-        navigate("/");
+      const user = res.data?.user;
+      const role = user?.role;
+
+      console.log("LOGIN RESPONSE:", res.data);
+
+      if (!user) {
+        toast.error("Invalid response from server");
+        return;
       }
+
+      if (role === "Admin") {
+        toast.success("Welcome Admin!");
+        navigate("/admindashboard");
+        return;
+      }
+
+      if (role === "Developer") {
+        toast.success("Welcome Developer!");
+        navigate("/developer/dashboard");
+        return;
+      }
+
+      toast.success("Login Successful!");
+      navigate("/");
+
     } catch (error) {
-      toast.error("Login Fail");
+      toast.error(error?.response?.data?.message || "Login failed");
     }
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 items-center justify-center px-4">
-      <div className="flex flex-col w-100 rounded-[24px] bg-white shadow-2xl overflow-hidden  md:flex flex-col w-full max-w-[420px] rounded-[24px] bg-white shadow-2xl overflow-hidden">
-        <div className="w-full bg-blue-900 py-8 flex flex-col items-center justify-center text-white">
-          <LogIn size={32} className="mb-2 opacity-80" />
-          <h2 className="font-bold text-2xl tracking-tight">Welcome Back</h2>
-          <p className="text-blue-200 text-sm">Login to your SoftRiseHub account</p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#050814] via-[#0B1220] to-[#050814] px-4">
+
+      {/* CARD */}
+      <div className="w-full max-w-md rounded-3xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl">
+
+        {/* HEADER */}
+        <div className="bg-gradient-to-r from-blue-900/80 to-indigo-900/80 text-center p-6">
+          <LogIn className="mx-auto mb-2 text-white" />
+          <h2 className="text-xl font-bold text-white">Welcome Back</h2>
+          <p className="text-sm text-white/60">
+            Login to SoftRiseHub
+          </p>
         </div>
-        <div className="flex flex-col p-6 md:p-8 space-y-5">
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1"> Email Address </label>
+
+        {/* FORM */}
+        <div className="p-6 space-y-4">
+
+          {/* EMAIL */}
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email"
+            className="w-full p-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-blue-500"
+          />
+
+          {/* PASSWORD */}
+          <div className="relative">
+
             <input
-              type="email"
-              name="email"
-              value={formData.email}
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={formData.password}
               onChange={handleChange}
-              placeholder="softrisehub@gmail.com"
-              className="w-full px-4 py-3 border-2 border-[#f3f4f6] rounded-[0.75rem] bg-white outline-none transition-all duration-200 focus:border-[#2563eb] focus:ring-4 focus:ring-[#2563eb1a]"
+              placeholder="Password"
+              className="w-full p-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 pr-10 focus:outline-none focus:border-blue-500"
             />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-3 text-white/60"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+
           </div>
 
-          <div className="space-y-1">
-            <div className="flex justify-between items-center ml-1">
-              <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                Password
-              </label>
-              <Link to="/forgot-password" className="text-[10px] text-blue-600 font-bold hover:underline">
-                Forgot?
-              </Link>
-            </div>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="••••••••"
-                className="w-full px-4 py-3 border-2 border-[#f3f4f6] rounded-[0.75rem] bg-white outline-none transition-all duration-200 focus:border-[#2563eb] focus:ring-4 focus:ring-[#2563eb1a]"
-              />
-            </div>
-          </div>
-
+          {/* BUTTON */}
           <button
             onClick={submit}
-            className="w-full p-4 mt-2 bg-blue-900 text-white font-bold rounded-xl shadow-lg active:scale-95 hover:bg-blue-800 transition-all"
+            className="w-full bg-blue-600 text-white p-3 rounded-xl font-bold hover:bg-blue-500 transition active:scale-95"
           >
             Login
           </button>
+
         </div>
 
-        {/* Footer */}
-        <div className="text-center pb-8 text-sm text-gray-500">
-          Don’t have an account?{" "}
-          <Link to="/signup" className="text-blue-600 font-bold hover:underline">
-            Signup now
+        {/* FOOTER */}
+        <div className="text-center p-4 text-sm text-white/60">
+          Don’t have account?{" "}
+          <Link to="/signup" className="text-blue-400 font-bold">
+            Signup
           </Link>
         </div>
+
       </div>
+
     </div>
   );
 };
