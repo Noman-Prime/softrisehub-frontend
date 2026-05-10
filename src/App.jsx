@@ -1,17 +1,16 @@
-import Navbar from "./components/Navbar";
 import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar.jsx"
+import Home from "./Pages/Home.jsx";
+import Projects from "./Pages/Product.jsx";
+import Service from "./Pages/Service.jsx";
+import Login from "./Pages/Login.jsx";
+import Signup from "./Pages/Signup.jsx";
+import Packages from "./Pages/Packages.jsx";
+import About from "./Pages/About.jsx";
 
-import Home from "./Pages/Home";
-import Projects from "./Pages/Product";
-import Service from "./Pages/Service";
-import Login from "./Pages/Login";
-import Signup from "./Pages/Signup";
-import Packages from "./Pages/Packages";
-import About from "./Pages/About";
-
-import Profile from "./Components/Profile";
-import ProjectView from "./Components/ProjectView";
-import AdminDashboard from "./Pages/Admindashbord";
+import Profile from "./components/Profile.jsx";
+import ProjectView from "./components/ProjectView.jsx";
+import AdminDashboard from "./Pages/Admindashbord.jsx";
 
 const App = () => {
   return (
