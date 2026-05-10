@@ -111,7 +111,7 @@ const Footer = () => {
                 href="mailto:hello@softrisehub.com"
                 className="text-sm text-white hover:text-blue-400 transition"
               >
-                info@softrisehub.com
+                support@softrisehub.com
               </a>
 
             </div>
