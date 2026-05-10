@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import Hero from "../components/Hero.jsx";
-import Services from "../components/Services.jsx";
-import FinalCTA from "../components/Check.jsx";
+import Hero from "../Components/Hero.jsx";
+import Services from "../Components/Services.jsx";
+import FinalCTA from "../Components/Check.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Footer from "../components/Footer.jsx";
-import Products from "../components/Products.jsx";
+import Footer from "../Components/Footer.jsx";
+import Products from "../Components/Products.jsx";
 
 const Home = () => {
     const navigate = useNavigate();
