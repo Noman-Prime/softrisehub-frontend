@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import Hero from "../Components/Hero.jsx";
 import Services from "../Components/Services.jsx";
-import FinalCTA from "../Components/Check.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Footer from "../Components/Footer.jsx";
 import Products from "../Components/Products.jsx";
-
+import Toplans from "../Components/Toplans.jsx"
+import Team from "../Components/Team.jsx";
 const Home = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -21,9 +21,10 @@ const Home = () => {
     return (
         <div className="bg-slate-950 text-white">
             <Hero />
-            <Services />
             <Products />
-            <FinalCTA />
+            <Services />
+            <Team />
+            <Toplans />
             <Footer />
         </div>
     );

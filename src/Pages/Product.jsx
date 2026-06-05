@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import socket from "../socket";
 import events from "../../events";
 import { useNavigate } from "react-router-dom";
 
@@ -8,28 +7,39 @@ const Project = () => {
     const [projects, setProjects] = useState([]);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const getProjects = async () => {
-            try {
-                const response = await axios.get(
-                    `${import.meta.env.VITE_API_URL}/api/v1/project/all`,
-                    { withCredentials: true }
-                );
-                setProjects(response.data.Projects);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+    const getProjects = async () => {
+        try {
+            const res = await axios.get(
+                `${import.meta.env.VITE_API_URL}/api/v1/project/all`,
+                { withCredentials: true }
+            );
+            setProjects(res.data.Projects);
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
+    useEffect(() => {
         getProjects();
 
-        socket.on("connect", getProjects);
-        socket.on(events.PROJECT_UPDATED, getProjects);
-
-        return () => {
-            socket.off(events.PROJECT_UPDATED, getProjects);
-            socket.off("connect", getProjects);
-        };
+        const result = new EventSource(`${import.meta.env.VITE_API_URL}/api/v1/project/all`,
+            { withCredentials: true })
+        result.onmessage = (event) => {
+            try {
+                const resp = JSON.parse(event.data)
+                if (resp && resp.Projects) {
+                    setProjects(resp.Projects)
+                }
+            } catch (error) {
+                console.log("Parsing have an error", error);
+            }
+        }
+        result.onerror = (error) => {
+            console.log("EventSource is not working", error);
+        }
+        return () => (
+            result.close()
+        )
     }, []);
 
     return (

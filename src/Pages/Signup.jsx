@@ -3,9 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Eye, EyeOff, UserPlus } from "lucide-react";
+import { useAuth } from "../Components/AuthContext";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -39,6 +41,10 @@ const Signup = () => {
         payload,
         { withCredentials: true }
       );
+
+      if (data?.user) {
+        setUser(data.user);
+      }
 
       toast.success("Account created successfully!");
       navigate("/");

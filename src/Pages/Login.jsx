@@ -3,9 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { LogIn, Eye, EyeOff } from "lucide-react";
+import { useAuth } from "../Components/AuthContext"; // Connect to your shared memory bank
 
 const Login = () => {
   const navigate = useNavigate();
+  const { setUser } = useAuth(); // Destructure setUser here
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -37,6 +39,9 @@ const Login = () => {
         toast.error("Invalid response from server");
         return;
       }
+
+      // Drop the user data into the central global state instance
+      setUser(user);
 
       if (role === "Admin") {
         toast.success("Welcome Admin!");

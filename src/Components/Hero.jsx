@@ -1,118 +1,131 @@
-import React from "react";
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 
 const Hero = () => {
+  const [object, setObject] = useState([]);
+  const [current, setCurrent] = useState(0);
+
+  const intervalRef = useRef(null);
+
+const getData = async () => {
+    try {
+      const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/slider/allsliders`, { withCredentials: true });
+      setObject(resp.data.sliders);
+      return resp.data;
+    } catch (error) {
+      console.error("there is no data in API", error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+    const result = new EventSource(`${import.meta.env.VITE_API_URL}/api/v1/slider/allsliders`, { withCredentials: true });
+
+    result.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data && data.sliders) {
+          setObject(data.sliders);
+        }
+      } catch (error) {
+        console.error("Parsing error:", error);
+      }
+    };
+
+    result.onerror = (error) => {
+      console.error("EventSource connection error:", error);
+    };
+    return () => {
+      result.close();
+    };
+  }, []);
+
+  const startAuto = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+
+    intervalRef.current = setInterval(() => {
+      setCurrent((prev) =>
+        prev === object.length - 1 ? 0 : prev + 1
+      );
+    }, 3000);
+  };
+
+  useEffect(() => {
+    if (!object.length) return;
+
+    startAuto();
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [object]);
+
+  const next = () => {
+    setCurrent((prev) =>
+      prev === object.length - 1 ? 0 : prev + 1
+    );
+    startAuto();
+  };
+
+  const prev = () => {
+    setCurrent((prev) =>
+      prev === 0 ? object.length - 1 : prev - 1
+    );
+    startAuto();
+  };
+
+  if (!object.length) return null;
+
+  const slider = object[current];
+
   return (
-    <section className="relative bg-[#020617] pt-28 pb-24 overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-20"></div>
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/10 blur-[140px] rounded-full"></div>
-        <div className="absolute bottom-0 right-1/4 w-[450px] h-[450px] bg-blue-500/10 blur-[140px] rounded-full"></div>
-      </div>
+    <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] overflow-hidden">
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-16">
+      {/* IMAGE with slow cinematic effect */}
+      <img
+        src={slider.image?.url}
+        alt="slider"
+        key={slider._id || current}
+        className="absolute inset-0 w-full h-full object-cover animate-slowZoomFade"
+      />
 
-          <div className="flex-1 text-center lg:text-left">
+      {/* dark overlay */}
+      <div className="absolute inset-0 bg-black/30" />
 
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="text-emerald-400 text-xs font-semibold tracking-widest uppercase">
-                System Operational
-              </span>
-            </div>
+      {/* left button */}
+      <button
+        onClick={prev}
+        className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 text-white hover:bg-black/60"
+      >
+        ‹
+      </button>
 
-            <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight tracking-tight">
-              Infrastructure built for
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-500">
-                modern engineering
-              </span>
-            </h1>
+      {/* right button */}
+      <button
+        onClick={next}
+        className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 text-white hover:bg-black/60"
+      >
+        ›
+      </button>
 
-            <p className="mt-8 text-slate-400 text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              A high-performance platform designed for scalable systems, automated workflows, and global deployment consistency across all environments.
-            </p>
+      {/* text */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-center w-[90%]">
 
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl mx-auto lg:mx-0">
+        <div className="bg-black/40 backdrop-blur-md px-6 py-4 rounded-2xl">
 
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
-                <p className="text-white font-semibold text-sm">Global Edge Infrastructure</p>
-                <p className="text-slate-500 text-xs mt-1">Deploy instantly worldwide</p>
-              </div>
+          <p className="text-white text-base md:text-lg font-medium">
+            {slider.description}
+          </p>
 
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
-                <p className="text-white font-semibold text-sm">Scalable Systems</p>
-                <p className="text-slate-500 text-xs mt-1">From startup to enterprise</p>
-              </div>
-
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
-                <p className="text-white font-semibold text-sm">Secure by Design</p>
-                <p className="text-slate-500 text-xs mt-1">Modern security standards</p>
-              </div>
-
-            </div>
-
-          </div>
-
-          <div className="flex-1 w-full max-w-[600px]">
-            <div className="relative">
-              <div className="absolute -inset-2 bg-gradient-to-r from-emerald-500 to-blue-600 blur-2xl opacity-20 rounded-2xl"></div>
-
-              <div className="relative bg-[#0b1120] border border-slate-800 rounded-2xl overflow-hidden shadow-2xl p-10">
-
-                <div className="text-xs font-mono text-slate-500 tracking-widest uppercase mb-6">
-                  Platform Architecture
-                </div>
-
-                <h3 className="text-2xl font-bold text-white mb-4">
-                  Built for scalable production systems
-                </h3>
-
-                <p className="text-slate-400 text-sm leading-relaxed mb-8">
-                  SoftRiseHub provides a modern foundation for building fast, reliable, and scalable digital products.
-                </p>
-
-                <div className="space-y-4">
-
-                  <div className="flex gap-3">
-                    <div className="w-2 h-2 mt-2 rounded-full bg-emerald-500"></div>
-                    <div>
-                      <p className="text-white text-sm font-semibold">Edge Deployment</p>
-                      <p className="text-slate-500 text-xs">Low latency global delivery</p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-3">
-                    <div className="w-2 h-2 mt-2 rounded-full bg-blue-500"></div>
-                    <div>
-                      <p className="text-white text-sm font-semibold">Backend Scaling</p>
-                      <p className="text-slate-500 text-xs">Handles high traffic workloads</p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-3">
-                    <div className="w-2 h-2 mt-2 rounded-full bg-emerald-500"></div>
-                    <div>
-                      <p className="text-white text-sm font-semibold">Secure Infrastructure</p>
-                      <p className="text-slate-500 text-xs">Built with security-first approach</p>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div className="mt-8 pt-6 border-t border-slate-800">
-                  <p className="text-xs text-slate-500">
-                    Trusted by developers building modern SaaS products worldwide.
-                  </p>
-                </div>
-
-              </div>
-
-            </div>
-          </div>
+          <button className="mt-2 text-sm text-sky-300 hover:text-sky-200 transition">
+            {slider?.button}
+          </button>
 
         </div>
+
       </div>
-    </section>
+
+    </div>
   );
 };
 

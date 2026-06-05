@@ -1,112 +1,107 @@
-import React from "react";
-import {
-  Globe,
-  Code2,
-  Brain,
-  LayoutDashboard,
-  ShieldCheck,
-  Cloud,
-  Database,
-  Smartphone
-} from "lucide-react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Services = () => {
-  const services = [
-    {
-      title: "Full-Stack Web Development",
-      desc: "Scalable React + Node.js architectures built for high traffic and production environments.",
-      icon: <Code2 />,
-      accent: "from-blue-500/20 to-cyan-400/20"
-    },
-    {
-      title: "AI & Intelligent Systems",
-      desc: "Custom AI solutions, automation pipelines, and machine learning integrations for modern products.",
-      icon: <Brain />,
-      accent: "from-indigo-500/20 to-blue-500/20"
-    },
-    {
-      title: "Cloud Infrastructure",
-      desc: "Deploy scalable systems on cloud platforms with CI/CD, monitoring, and high availability.",
-      icon: <Cloud />,
-      accent: "from-emerald-500/20 to-blue-500/20"
-    },
-    {
-      title: "UI/UX Engineering",
-      desc: "High-conversion interfaces designed with usability, accessibility, and modern design systems.",
-      icon: <LayoutDashboard />,
-      accent: "from-purple-500/20 to-indigo-500/20"
-    },
-    {
-      title: "Database Architecture",
-      desc: "Optimized SQL/NoSQL schemas ensuring performance, scalability, and data integrity.",
-      icon: <Database />,
-      accent: "from-yellow-500/20 to-orange-400/20"
-    },
-    {
-      title: "Cybersecurity Systems",
-      desc: "Secure authentication, authorization, and protection layers for enterprise-grade applications.",
-      icon: <ShieldCheck />,
-      accent: "from-red-500/20 to-pink-500/20"
+  const [service, setService] = useState([]);
+
+  const getServices = async () => {
+    try {
+      const resp = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/v1/service/get/all`,
+        { withCredentials: true }
+      );
+      setService(resp.data.service);
+    } catch (error) {
+      console.error(error);
     }
-  ];
+  };
+
+  useEffect(() => {
+    getServices();
+    const result = new EventSource(
+      `${import.meta.env.VITE_API_URL}/api/v1/service/get/all`,
+      { withCredentials: true }
+    )
+    result.onmessage = (event) => {
+      try {
+        const resp = JSON.parse(event.data)
+        if (resp && resp.service) {
+          setService(resp.service)
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    result.onerror = (error) => {
+      console.log("EventScource is not working", error);
+    }
+    return (close) => {
+      result.close()
+    }
+  }, []);
 
   return (
-    <section className="relative py-28 bg-[#0B0F19] overflow-hidden">
+    <div className="relative py-24 px-6 bg-gradient-to-b from-white via-sky-50/40 to-white text-slate-900 overflow-hidden">
+      <div className="absolute top-20 left-20 w-72 h-72 bg-sky-200/30 blur-[120px] rounded-full" />
+      <div className="absolute bottom-20 right-20 w-72 h-72 bg-blue-200/30 blur-[120px] rounded-full" />
 
-      <div className="absolute top-[-120px] left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-blue-600/10 blur-[140px] rounded-full"></div>
+      <div className="relative max-w-6xl mx-auto">
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-
-        <div className="text-center max-w-2xl mx-auto mb-20">
-
-          <h3 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-6">
-            Engineering Solutions<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">
-              Modern Digital Systems
-            </span>
-          </h3>
-
-          <p className="text-gray-400 text-lg">
-            We build scalable, secure, and production-ready software systems for startups and enterprises.
+        <div className="text-center mb-14">
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-900">
+            Our Services
+          </h1>
+          <p className="mt-4 text-slate-600 max-w-2xl mx-auto">
+            We design and build reliable digital solutions that help businesses grow, automate processes, and scale efficiently.
           </p>
-
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-          {services.map((service, index) => (
+          {service.slice(0, 5).map((data) => (
             <div
-              key={index}
-              className={`group relative p-[1px] rounded-3xl bg-gradient-to-br ${service.accent}`}
+              key={data?._id}
+              className="group bg-white border border-sky-100 rounded-3xl p-8 shadow-sm hover:shadow-xl hover:shadow-sky-100 hover:border-sky-300 hover:-translate-y-2 transition-all duration-500"
             >
+              <h2 className="text-xl font-bold mb-3 group-hover:text-sky-600 transition">
+                {data.title}
+              </h2>
 
-              <div className="h-full bg-[#111827]/80 backdrop-blur-xl rounded-3xl p-8 border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
+              <p className="text-slate-600 text-sm leading-relaxed mb-6">
+                {data.description}
+              </p>
 
-                <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-blue-400 mb-6 group-hover:scale-110 transition">
-                  {service.icon}
-                </div>
-
-                <h3 className="text-lg font-semibold text-white mb-3 group-hover:text-blue-400 transition">
-                  {service.title}
-                </h3>
-
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  {service.desc}
-                </p>
-
-                <div className="mt-6 text-sm font-medium text-blue-400 opacity-70 group-hover:opacity-100 flex items-center gap-1">
-                  Explore service <span className="group-hover:translate-x-1 transition">→</span>
-                </div>
-
+              <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-100">
+                {data.tags.map((tag, i) => (
+                  <span
+                    key={i}
+                    className="px-3 py-1 text-xs font-medium bg-sky-50 text-sky-700 rounded-lg border border-sky-100"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
-
             </div>
           ))}
 
-        </div>
+          <Link
+            to="/service"
+            className="group rounded-3xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center text-white min-h-[320px] shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
+          >
+            <div className="text-center px-6">
+              <h3 className="text-2xl font-bold mb-3">
+                View All Services
+              </h3>
+              <p className="text-white/90 text-sm leading-relaxed">
+                Explore our complete range of digital services designed for modern businesses.
+              </p>
+            </div>
+          </Link>
 
+        </div>
       </div>
-    </section>
+    </div>
   );
 };
 
