@@ -1,94 +1,97 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 
 const ServicePage = () => {
-    const [service, setService] = useState([]);
+  const [service, setService] = useState([]);
 
-    const getServices = async () => {
-        try {
-            const resp = await axios.get(
-                `${import.meta.env.VITE_API_URL}/api/v1/service/get/all`,
-                { withCredentials: true }
-            );
-            setService(resp.data.service);
-        } catch (error) {
-            console.error(error);
+  const getServices = async () => {
+    try {
+      const resp = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/v1/service/get/all`,
+        { withCredentials: true }
+      );
+      setService(resp.data.service);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getServices();
+    
+    const result = new EventSource(
+      `${import.meta.env.VITE_API_URL}/api/v1/service/get/all`,
+      { withCredentials: true }
+    );
+
+    result.onmessage = (event) => {
+      try {
+        const resp = JSON.parse(event.data);
+        if (resp && resp.service) {
+          setService(resp.service);
         }
+      } catch (error) {
+        console.log(error);
+      }
     };
 
-    useEffect(() => {
-        getServices();
-        const result = new EventSource(
-            `${import.meta.env.VITE_API_URL}/api/v1/service/get/all`,
-            { withCredentials: true }
-        )
-        result.onmessage = (event) =>{
-            try {
-                const resp = JSON.parse(event.data)
-                if(resp && resp.service){
-                    setService(resp.service)
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        result.onerror = (error) =>{
-            console.log("EventScource is not working", error);
-        }
-        return (close) =>{
-            result.close()
-        }
-    }, []);
+    result.onerror = (error) => {
+      console.log("EventSource error", error);
+    };
 
-    return (
-        <div className="relative py-24 px-6 bg-gradient-to-b from-white via-sky-50/40 to-white text-slate-900 overflow-hidden">
-            <div className="absolute top-20 left-20 w-72 h-72 bg-sky-200/30 blur-[120px] rounded-full" />
-            <div className="absolute bottom-20 right-20 w-72 h-72 bg-blue-200/30 blur-[120px] rounded-full" />
+    return () => {
+      result.close();
+    };
+  }, []);
 
-            <div className="relative max-w-6xl mx-auto">
-
-                <div className="text-center mb-14">
-                    <h1 className="text-4xl md:text-5xl font-bold text-slate-900">
-                        Our Services
-                    </h1>
-                    <p className="mt-4 text-slate-600 max-w-2xl mx-auto">
-                        We design and build reliable digital solutions that help businesses grow, automate processes, and scale efficiently.
-                    </p>
-                </div>
-
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                    {service.map((data) => (
-                        <div
-                            key={data?._id}
-                            className="group bg-white border border-sky-100 rounded-3xl p-8 shadow-sm hover:shadow-xl hover:shadow-sky-100 hover:border-sky-300 hover:-translate-y-2 transition-all duration-500"
-                        >
-                            <h2 className="text-xl font-bold mb-3 group-hover:text-sky-600 transition">
-                                {data.title}
-                            </h2>
-
-                            <p className="text-slate-600 text-sm leading-relaxed mb-6">
-                                {data.description}
-                            </p>
-
-                            <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-100">
-                                {data.tags.map((tag, i) => (
-                                    <span
-                                        key={i}
-                                        className="px-3 py-1 text-xs font-medium bg-sky-50 text-sky-700 rounded-lg border border-sky-100"
-                                    >
-                                        {tag}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-
-                </div>
-            </div>
+  return (
+    <div className="w-full min-h-screen bg-slate-50 text-slate-900 font-sans antialiased">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        
+        <div className="w-full max-w-3xl mb-16">
+          <span className="text-xs font-bold uppercase tracking-wider text-blue-600 block mb-2">
+            / Capabilities
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+            Our Services
+          </h1>
+          <p className="mt-3 text-slate-500 text-sm sm:text-base leading-relaxed">
+            We design and build reliable digital solutions that help businesses grow, automate processes, and scale efficiently.
+          </p>
         </div>
-    );
+
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {service.map((data) => (
+            <div
+              key={data?._id}
+              className="w-full min-w-0 flex flex-col justify-between bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm hover:border-slate-300 transition duration-150"
+            >
+              <div className="w-full min-w-0">
+                <h2 className="text-lg font-bold text-slate-900 tracking-tight mb-3 truncate">
+                  {data.title}
+                </h2>
+                <p className="text-slate-500 text-sm leading-relaxed font-normal mb-6 break-words">
+                  {data.description}
+                </p>
+              </div>
+
+              <div className="w-full pt-4 border-t border-slate-100 flex flex-wrap gap-1.5">
+                {data.tags.map((tag, i) => (
+                  <span
+                    key={i}
+                    className="inline-block px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide bg-slate-50 text-slate-600 border border-slate-200 rounded-md whitespace-nowrap"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </div>
+  );
 };
 
 export default ServicePage;

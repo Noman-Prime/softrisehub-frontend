@@ -1,8 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Eye, EyeOff, UserPlus } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../Components/AuthContext";
 
 const Signup = () => {
@@ -27,7 +27,8 @@ const Signup = () => {
     });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       setLoading(true);
 
@@ -57,95 +58,140 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#050814] via-[#0B1220] to-[#050814] px-4">
-
-      {/* CARD */}
-      <div className="w-full max-w-md rounded-3xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl">
-
-        {/* HEADER */}
-        <div className="text-center py-8 bg-gradient-to-r from-blue-900/80 to-indigo-900/80">
-          <UserPlus className="mx-auto mb-2 text-white" size={34} />
-          <h2 className="text-2xl font-bold text-white">Join SoftRiseHub</h2>
-          <p className="text-white/60 text-sm">
-            Create your free user account
+    <div className="w-full min-h-[100dvh] flex flex-col justify-center items-center bg-slate-50 text-slate-900 font-sans antialiased px-4 py-12 selection:bg-slate-900 selection:text-white">
+      <div className="w-full max-w-md mx-auto flex flex-col justify-center">
+        
+        {/* Header Block */}
+        <div className="text-center mb-8">
+          <span className="text-xs font-bold uppercase tracking-[0.25em] text-blue-600 block mb-3">
+            SoftRiseHub
+          </span>
+          <h1 className="text-3xl font-black tracking-tight text-slate-900">
+            Create account
+          </h1>
+          <p className="mt-2 text-sm text-slate-500 font-normal">
+            Build and deploy commercial-grade systems.
           </p>
         </div>
 
-        {/* FORM */}
-        <div className="p-6 space-y-4">
+        {/* Form Grid Layer */}
+        <form onSubmit={handleSubmit} className="w-full bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-[0_24px_48px_-12px_rgba(15,23,42,0.04)] space-y-4">
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div className="w-full min-w-0">
+              <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                First Name
+              </label>
+              <input
+                name="firstName"
+                type="text"
+                required
+                placeholder="John"
+                value={formData.firstName}
+                onChange={handleChange}
+                className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm border border-slate-200 rounded-lg placeholder-slate-300 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition"
+              />
+            </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <input
-              name="firstName"
-              placeholder="First Name"
-              className="p-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-blue-500"
-              onChange={handleChange}
-            />
+            <div className="w-full min-w-0">
+              <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                Last Name
+              </label>
+              <input
+                name="lastName"
+                type="text"
+                required
+                placeholder="Doe"
+                value={formData.lastName}
+                onChange={handleChange}
+                className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm border border-slate-200 rounded-lg placeholder-slate-300 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition"
+              />
+            </div>
+          </div>
 
+          <div className="w-full">
+            <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+              Email Address
+            </label>
             <input
-              name="lastName"
-              placeholder="Last Name"
-              className="p-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-blue-500"
+              name="email"
+              type="email"
+              required
+              placeholder="name@company.com"
+              value={formData.email}
               onChange={handleChange}
+              className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm border border-slate-200 rounded-lg placeholder-slate-300 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition"
             />
           </div>
 
-          <input
-            name="email"
-            placeholder="Email"
-            className="w-full p-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-blue-500"
-            onChange={handleChange}
-          />
-
-          {/* PASSWORD */}
-          <div className="relative">
-            <input
-              name="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              className="w-full p-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 pr-10 focus:outline-none focus:border-blue-500"
-              onChange={handleChange}
-            />
-
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-3 text-white/60"
-            >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
+          <div className="w-full">
+            <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+              Password
+            </label>
+            <div className="relative w-full">
+              <input
+                name="password"
+                type={showPassword ? "text" : "password"}
+                required
+                placeholder="••••••••"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm border border-slate-200 rounded-lg pr-10 placeholder-slate-300 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 transition"
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
           </div>
 
-          <input
-            name="phoneNumber"
-            placeholder="Phone Number"
-            className="w-full p-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-blue-500"
-            onChange={handleChange}
-          />
+          <div className="w-full">
+            <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+              Phone Number
+            </label>
+            <input
+              name="phoneNumber"
+              type="tel"
+              required
+              placeholder="+1 (555) 000-0000"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm border border-slate-200 rounded-lg placeholder-slate-300 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition"
+            />
+          </div>
 
-          <input
-            name="country"
-            placeholder="Country"
-            className="w-full p-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-blue-500"
-            onChange={handleChange}
-          />
+          <div className="w-full">
+            <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+              Country
+            </label>
+            <input
+              name="country"
+              type="text"
+              required
+              placeholder="United States"
+              value={formData.country}
+              onChange={handleChange}
+              className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm border border-slate-200 rounded-lg placeholder-slate-300 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition"
+            />
+          </div>
 
-          {/* BUTTON */}
           <button
-            onClick={handleSubmit}
+            type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-500 transition active:scale-95"
+            className="w-full mt-2 bg-slate-900 text-white text-sm font-bold py-3 px-4 rounded-lg hover:bg-slate-800 active:scale-[0.99] transition duration-150 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
           >
-            {loading ? "Creating Account..." : "Create Account"}
+            {loading ? "Creating account..." : "Continue"}
           </button>
+        </form>
 
-        </div>
-
-        {/* FOOTER */}
-        <div className="text-center pb-6 text-sm text-white/60">
+        {/* Bottom Link Layout */}
+        <div className="w-full text-center text-sm text-slate-500 font-normal mt-6">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-400 font-bold">
-            Login
+          <Link to="/login" className="text-slate-900 font-bold hover:underline">
+            Sign in
           </Link>
         </div>
 

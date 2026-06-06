@@ -3,7 +3,7 @@ import axios from "axios";
 import events from "../../events";
 import { useNavigate } from "react-router-dom";
 
-const Project = () => {
+const Product = () => {
     const [projects, setProjects] = useState([]);
     const navigate = useNavigate();
 
@@ -43,98 +43,76 @@ const Project = () => {
     }, []);
 
     return (
-        <section className="min-h-screen py-24 bg-[#050814] text-white relative overflow-hidden">
+        <section className="min-h-screen py-24 bg-slate-50 text-slate-900 relative overflow-hidden font-sans">
+            <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 relative z-10">
 
-            <div className="absolute inset-0 opacity-50">
-                <div className="absolute top-[-220px] left-1/2 -translate-x-1/2 w-[750px] h-[750px] bg-blue-600/10 blur-[180px] rounded-full"></div>
-            </div>
-
-            <div className="max-w-7xl mx-auto px-10 relative z-10">
-
-                <div className="text-center mb-20">
-
-                    <p className="text-blue-400 text-[11px] tracking-[0.35em] uppercase font-semibold mb-4">
-                        Industry Work
+                <div className="text-center mb-16">
+                    <p className="text-blue-600 text-[11px] tracking-[0.35em] uppercase font-bold mb-3">
+                        / Industry Work
                     </p>
-
-                    <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-5">
+                    <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 mb-4">
                         Selected Expertise
                     </h1>
-
-                    <p className="text-white/50 max-w-xl mx-auto text-sm">
+                    <p className="text-slate-500 max-w-xl mx-auto text-sm leading-relaxed">
                         A curated collection of engineered systems and digital solutions.
                     </p>
-
                 </div>
 
-                <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-
+                <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
                     {projects?.map((project) => (
                         <div
                             key={project._id}
                             onClick={() => navigate(`/projectview/${project._id}`)}
-                            className="group relative w-full max-w-[260px] mx-auto rounded-2xl overflow-hidden bg-white/5 border border-white/10 backdrop-blur-xl hover:border-blue-500/30 hover:-translate-y-2 transition-all duration-300 shadow-[0_10px_40px_-20px_rgba(0,0,0,0.6)] cursor-pointer"
+                            className="group relative w-full max-w-[280px] rounded-2xl overflow-hidden bg-white border border-slate-200 hover:border-slate-300 hover:shadow-[0_20px_40px_-15px_rgba(15,23,42,0.06)] active:scale-[0.99] transition-all duration-200 cursor-pointer flex flex-col justify-between"
                         >
-
-                            <div className="relative h-36 overflow-hidden">
-
-                                <img
-                                    src={project?.images?.[0].url}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                                />
-
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#050814] via-transparent to-transparent"></div>
-
-                                <div className="absolute top-3 left-3">
-                                    <span className={`text-[10px] px-2 py-1 rounded-full font-semibold border backdrop-blur-md
-                                        ${project?.endDate
-                                            ? "bg-green-500/10 text-green-400 border-green-500/20"
-                                            : "bg-orange-500/10 text-orange-300 border-orange-500/20"
-                                        }`}
-                                    >
-                                        {project?.endDate ? "Done" : "Active"}
-                                    </span>
+                            <div>
+                                <div className="relative h-40 w-full bg-slate-100 overflow-hidden border-b border-slate-100">
+                                    <img
+                                        src={project?.images?.[0].url}
+                                        alt={project?.name}
+                                        className="w-full h-full object-cover group-hover:scale-[1.02] transition duration-300"
+                                    />
+                                    <div className="absolute top-3 left-3">
+                                        <span className={`text-[10px] px-2.5 py-1 rounded-md font-bold tracking-wider uppercase border shadow-sm
+                                            ${project?.endDate
+                                                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                                : "bg-amber-50 text-amber-700 border-amber-200"
+                                            }`}
+                                        >
+                                            {project?.endDate ? "Done" : "Active"}
+                                        </span>
+                                    </div>
                                 </div>
 
-                            </div>
-
-                            <div className="p-4">
-
-                                <h3 className="text-sm font-semibold text-white mb-1 group-hover:text-blue-400 transition line-clamp-1">
-                                    {project?.name}
-                                </h3>
-
-                                <p className="text-[11px] text-white/50 line-clamp-2 leading-relaxed mb-4">
-                                    {project?.description}
-                                </p>
-
-                                <div className="flex items-center justify-between text-[10px] text-white/40">
-
-                                    <span>{project?.startingDate}</span>
-
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            navigate(`/projectview/${project._id}`);
-                                        }}
-                                        className="text-blue-400 font-medium hover:text-blue-300 transition"
-                                    >
-                                        View →
-                                    </button>
-
+                                <div className="p-5">
+                                    <h3 className="text-sm font-bold text-slate-900 mb-1.5 group-hover:text-blue-600 transition line-clamp-1 tracking-tight">
+                                        {project?.name}
+                                    </h3>
+                                    <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed font-normal">
+                                        {project?.description}
+                                    </p>
                                 </div>
-
                             </div>
 
+                            <div className="px-5 pb-5 pt-2 flex items-center justify-between text-[11px] font-medium border-t border-slate-50">
+                                <span className="text-slate-400">{project?.startingDate}</span>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate(`/projectview/${project._id}`);
+                                    }}
+                                    className="text-blue-600 font-bold hover:text-blue-700 transition"
+                                >
+                                    View Details →
+                                </button>
+                            </div>
                         </div>
                     ))}
-
                 </div>
 
             </div>
-
         </section>
     );
 };
 
-export default Project;
+export default Product;

@@ -7,6 +7,7 @@ import Footer from "../Components/Footer.jsx";
 import Products from "../Components/Products.jsx";
 import Toplans from "../Components/Toplans.jsx"
 import Team from "../Components/Team.jsx";
+
 const Home = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -19,13 +20,12 @@ const Home = () => {
     }, [location.state, location.pathname, navigate]);
 
     return (
-        <div className="bg-slate-950 text-white">
+        <div className="bg-slate-50 text-slate-900">
             <Hero />
             <Products />
             <Services />
             <Team />
             <Toplans />
-            <Footer />
         </div>
     );
 };

@@ -79,54 +79,49 @@ const getData = async () => {
   const slider = object[current];
 
   return (
-    <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] overflow-hidden">
+  <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] overflow-hidden">
 
-      {/* IMAGE with slow cinematic effect */}
-      <img
-        src={slider.image?.url}
-        alt="slider"
-        key={slider._id || current}
-        className="absolute inset-0 w-full h-full object-cover animate-slowZoomFade"
-      />
+    <img
+      src={slider.image?.url}
+      alt="slider"
+      key={slider._id || current}
+      className="absolute inset-0 w-full h-full object-cover animate-slowZoomFade"
+    />
 
-      {/* dark overlay */}
-      <div className="absolute inset-0 bg-black/30" />
+    <div className="absolute inset-0 bg-black/30"></div>
 
-      {/* left button */}
-      <button
-        onClick={prev}
-        className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 text-white hover:bg-black/60"
-      >
-        ‹
-      </button>
+    <button
+      onClick={prev}
+      className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/40 text-white hover:bg-black/60 flex items-center justify-center"
+    >
+      ‹
+    </button>
 
-      {/* right button */}
-      <button
-        onClick={next}
-        className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 text-white hover:bg-black/60"
-      >
-        ›
-      </button>
+    <button
+      onClick={next}
+      className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/40 text-white hover:bg-black/60 flex items-center justify-center"
+    >
+      ›
+    </button>
 
-      {/* text */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-center w-[90%]">
+    <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 w-[92%] sm:w-[85%] md:w-[70%] text-center">
 
-        <div className="bg-black/40 backdrop-blur-md px-6 py-4 rounded-2xl">
+      <div className="bg-black/40 backdrop-blur-md px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl">
 
-          <p className="text-white text-base md:text-lg font-medium">
-            {slider.description}
-          </p>
+        <p className="text-white text-sm sm:text-base md:text-lg font-medium leading-snug">
+          {slider.description}
+        </p>
 
-          <button className="mt-2 text-sm text-sky-300 hover:text-sky-200 transition">
-            {slider?.button}
-          </button>
-
-        </div>
+        <button className="mt-2 text-xs sm:text-sm text-sky-300 hover:text-sky-200 transition">
+          {slider?.button}
+        </button>
 
       </div>
 
     </div>
-  );
+
+  </div>
+);
 };
 
 export default Hero;
