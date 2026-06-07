@@ -90,7 +90,7 @@ const Products = () => {
 
           {/* "View All Projects" Link Card */}
           <Link 
-            to="/projects" 
+            to="/products" 
             className="rounded-2xl bg-[#2B3F43] flex items-center justify-center min-h-[250px] sm:min-h-[280px] shadow-sm p-6 text-center"
           >
             <div className="flex text-white gap-2 justify-center items-center">
