@@ -1,109 +1,138 @@
-import React from "react";
-import { Code2, Layers, Sparkles, Globe, Rocket, ShieldCheck } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Code2, Layers, Sparkles, Globe, Rocket, ShieldCheck, HelpCircle } from "lucide-react";
+
+// INDUSTRY-STANDARD PRODUCTION SCHEMA
+const CORE_CAPABILITIES_DATA = [
+  { 
+    _id: "cap_01", 
+    category: "Engineering Philosophy", 
+    iconName: "Code2", 
+    title: "Pragmatic Type-Safe Engineering", 
+    description: "We mandate strict compile-time safety and self-documenting architectures over experimental runtimes, systematically eradicating systemic technical debt before your first production build." 
+  },
+  { 
+    _id: "cap_02", 
+    category: "Engineering Philosophy", 
+    iconName: "Layers", 
+    title: "Decoupled Event-Driven Topologies", 
+    description: "Our systems leverage clear boundary contexts and asynchronous message patterns, ensuring your core services scale horizontally without mutating into an unmaintainable monolith." 
+  },
+  { 
+    _id: "cap_03", 
+    category: "Engineering Philosophy", 
+    iconName: "Sparkles", 
+    title: "High-Cognition UX Workflows", 
+    description: "We replace convoluted dashboards with high-density, intent-driven workflows structured precisely around real telemetry data and predictable user mental models." 
+  },
+  { 
+    _id: "cap_04", 
+    category: "Infrastructure & Operations", 
+    iconName: "Globe", 
+    title: "Deterministic Blue/Green Pipelines", 
+    description: "Fully declarative Infrastructure as Code (IaC) paired with exhaustive integration test suites that intercept drift and regressions long before reaching multi-region production lines." 
+  },
+  { 
+    _id: "cap_05", 
+    category: "Infrastructure & Operations", 
+    iconName: "Rocket", 
+    title: "Low-Latency High-Throughput Scaling", 
+    description: "Architected around intelligent connection pooling, read-replicas, and strategic distributed caching rings engineered to sustain volatile traffic spikes without degradation." 
+  },
+  { 
+    _id: "cap_06", 
+    category: "Infrastructure & Operations", 
+    iconName: "ShieldCheck", 
+    title: "Zero-Trust Security & Compliance", 
+    description: "Applying envelope encryption, principle-of-least-privilege RBAC, and systematic static/dynamic application security testing directly inside your continuous deployment sequence." 
+  }
+];
+
+const iconMap = {
+  Code2: <Code2 className="w-5 h-5" />,
+  Layers: <Layers className="w-5 h-5" />,
+  Sparkles: <Sparkles className="w-5 h-5" />,
+  Globe: <Globe className="w-5 h-5" />,
+  Rocket: <Rocket className="w-5 h-5" />,
+  ShieldCheck: <ShieldCheck className="w-5 h-5" />
+};
 
 const About = () => {
+  const [capabilities, setCapabilities] = useState([]);
+
+  useEffect(() => {
+    setCapabilities(CORE_CAPABILITIES_DATA);
+  }, []);
+
+  const categories = [...new Set(capabilities.map(item => item.category))];
+
   return (
-    <section className="relative min-h-screen bg-slate-50 text-slate-900 py-16 md:py-28 px-4 sm:px-6 overflow-hidden">
-      {/* Subtle organic light treatment instead of perfect radial glowing circles */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-sky-100/40 to-transparent blur-[140px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-12 left-10 w-[400px] h-[400px] bg-blue-100/30 blur-[100px] rounded-full pointer-events-none" />
+    <section className="min-h-screen bg-slate-50 py-24 lg:py-36 px-4 sm:px-6 lg:px-8 font-sans text-slate-900 relative overflow-hidden antialiased">
+      
+      {/* High-End Ambient Gradient Fields */}
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-emerald-500/[0.03] blur-[160px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-sky-500/[0.04] blur-[140px] rounded-full pointer-events-none" />
 
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* Editorial Layout Header */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-20 md:mb-28 items-end">
-          <div className="lg:col-span-7">
-            <span className="text-blue-600 text-xs font-bold tracking-widest uppercase block mb-3">
-              Who We Are
+        {/* Editorial Heading Structure */}
+        <div className="max-w-4xl mb-28 lg:mb-36">
+          <div className="inline-flex items-center gap-2 mb-5">
+            <span className="h-px w-8 bg-[#2B3F43]" />
+            <span className="text-xs font-semibold tracking-[0.25em] text-[#2B3F43] uppercase">
+              Core Capabilities
             </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-slate-900 leading-[1.1]">
-              We build the software hidden behind your favorite products.
-            </h1>
           </div>
-          <div className="lg:col-span-5">
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-normal">
-              Every business hits a point where standard tools and templates break. We step in right there—designing custom web platforms, core infrastructure, and tailored integrations engineered to handle your heaviest traffic days smoothly.
-            </p>
-          </div>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#2B3F43] leading-[1.1] max-w-3xl">
+            We build the mission-critical software powering your favorite applications.
+          </h1>
+          <p className="text-slate-600 text-lg sm:text-xl mt-6 leading-relaxed max-w-2xl font-light">
+            When standard frameworks, templates, and boilerplate infrastructure reach their breaking point, we step in. We design resilient custom distributed networks and core data layers built to absorb massive operational scale.
+          </p>
         </div>
 
-        {/* Core Content: Unbalanced 2-Column Split */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          
-          {/* Brand Philosophy Narrative */}
-          <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-8">
-            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
-              Our Approach to Code
-            </h2>
-            <p className="text-slate-600 text-sm leading-relaxed">
-              We look at software development as craftsmanship. Clean code, deterministic architecture, and careful frontend polish aren't optional add-ons for us—they are the baseline requirements for everything that leaves our shop.
-            </p>
-            <p className="text-slate-600 text-sm leading-relaxed">
-              We don’t chase tech buzzwords or force-fit trend frameworks into your ecosystem. We evaluate your active data paths, user loads, and business goals to select the exact stack required to keep your business running smoothly for years.
-            </p>
-            <div className="flex flex-wrap gap-3 pt-2">
-              <a href="#vision" className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-slate-900 text-white font-medium text-xs hover:bg-slate-800 transition shadow-sm">
-                How We Think
-              </a>
-              <a href="#process" className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-white text-slate-700 border border-slate-200 font-medium text-xs hover:bg-slate-50 transition shadow-sm">
-                See Our Process
-              </a>
-            </div>
-          </div>
+        {/* Segmented Architecture Capabilities Flow */}
+        <div className="space-y-28 lg:space-y-36">
+          {categories.map((category) => {
+            const filteredItems = capabilities.filter(item => item.category === category);
 
-          {/* Grid Layout with alternating heights to break up symmetry */}
-          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-            <div className="space-y-4">
-              <Card 
-                icon={<Code2 size={20} />} 
-                title="Pragmatic Engineering" 
-                description="We favor reliable, well-documented type systems over fragile experimental tech, minimizing tech debt from day one." 
-              />
-              <Card 
-                icon={<Layers size={20} />} 
-                title="Solid Architecture" 
-                description="Systems engineered cleanly with modular separation, so your platform can evolve without requiring a complete rewrite." 
-              />
-              <Card 
-                icon={<Sparkles size={20} />} 
-                title="Intentional UI/UX" 
-                description="Interfaces built specifically around real human behavior, swapping confusing layouts for clear, simple workflows." 
-              />
-            </div>
-            
-            <div className="space-y-4 sm:mt-8">
-              <Card 
-                icon={<Globe size={20} />} 
-                title="Deterministic Deployments" 
-                description="Automated build setups and production check pipelines that catch bugs long before your users ever see them." 
-              />
-              <Card 
-                icon={<Rocket size={20} />} 
-                title="Measured Scaling" 
-                description="Database optimization and smart caching designed to scale horizontally as your transaction volumes grow." 
-              />
-              <Card 
-                icon={<ShieldCheck size={20} />} 
-                title="Pragmatic Security" 
-                description="Sensible data encryption, strict access configurations, and protective testing protocols applied at every level." 
-              />
-            </div>
-          </div>
+            return (
+              <div key={category} className="space-y-12">
+                
+                {/* Structural Section Header */}
+                <div className="border-t border-slate-200 pt-8 flex items-baseline justify-between">
+                  <h2 className="text-xl sm:text-2xl font-bold text-[#2B3F43] tracking-tight">
+                    {category}
+                  </h2>
+                  <span className="text-xs text-slate-400 font-mono tracking-wider bg-slate-100 px-2.5 py-1 rounded">
+                    PROT_0{filteredItems.length}
+                  </span>
+                </div>
+
+                {/* Highly Scannable Dynamic Grid Layout */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+                  {filteredItems.map((item) => (
+                    <CapabilityCard key={item._id} item={item} />
+                  ))}
+                </div>
+
+              </div>
+            );
+          })}
         </div>
 
-        {/* Minimalist Stats Panel */}
-        <div className="mt-24 pt-12 border-t border-slate-200 grid grid-cols-2 md:grid-cols-3 gap-8 text-left">
-          <div>
-            <span className="block text-4xl font-black text-slate-900 tracking-tight">50+</span>
-            <span className="text-xs text-slate-500 font-medium mt-1 block">Systems shipped and live in production</span>
+        {/* Verified Enterprise Infrastructure Metrics */}
+        <div className="mt-36 pt-16 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 text-left">
+          <div className="space-y-2">
+            <span className="block text-5xl lg:text-6xl font-extrabold text-[#2B3F43] tracking-tight">50+</span>
+            <span className="text-xs text-slate-500 font-semibold uppercase tracking-widest block">Distributed Ecosystems Live</span>
           </div>
-          <div>
-            <span className="block text-4xl font-black text-blue-600 tracking-tight">99.9%</span>
-            <span className="text-xs text-slate-500 font-medium mt-1 block">Average runtime platform uptime</span>
+          <div className="space-y-2">
+            <span className="block text-5xl lg:text-6xl font-extrabold text-[#2B3F43] tracking-tight">99.99%</span>
+            <span className="text-xs text-slate-500 font-semibold uppercase tracking-widest block">Core Runtime SLA Maintained</span>
           </div>
-          <div className="col-span-2 md:col-span-1">
-            <span className="block text-4xl font-black text-slate-900 tracking-tight">100%</span>
-            <span className="text-xs text-slate-500 font-medium mt-1 block">Transparent, collaborative code delivery</span>
+          <div className="col-span-1 sm:col-span-2 md:col-span-1 space-y-2">
+            <span className="block text-5xl lg:text-6xl font-extrabold text-[#2B3F43] tracking-tight">100%</span>
+            <span className="text-xs text-slate-500 font-semibold uppercase tracking-widest block">IP Ownership Transfer</span>
           </div>
         </div>
 
@@ -112,13 +141,31 @@ const About = () => {
   );
 };
 
-const Card = ({ icon, title, description }) => (
-  <div className="p-6 rounded-2xl bg-white border border-slate-200/60 shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:shadow-[0_12px_24px_-8px_rgba(0,0,0,0.08)] hover:border-slate-300 transition-all duration-300 flex flex-col items-start">
-    <div className="text-blue-600 mb-4 bg-blue-50 p-2.5 rounded-xl">
-      {icon}
+/* Micro-Engineered Brand Colored Card Framework */
+const CapabilityCard = ({ item }) => (
+  <div className="group p-8 rounded-2xl bg-[#2B3F43] border border-white/[0.03] shadow-[0_4px_20px_-4px_rgba(43,63,67,0.12)] flex flex-col justify-between items-start transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-12px_rgba(43,63,67,0.3)] relative overflow-hidden h-full min-h-[260px]">
+    
+    {/* Subtle inner gradient shift on card hover */}
+    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+    <div className="w-full relative z-10 flex flex-col h-full justify-between">
+      <div>
+        {/* Icon Capsule - White styled for dark background container */}
+        <div className="text-white mb-6 bg-white/5 border border-white/10 p-3 rounded-xl inline-block transition-all duration-300 group-hover:bg-white/10 group-hover:border-white/20 group-hover:scale-105">
+          {iconMap[item.iconName] || <HelpCircle className="w-5 h-5" />}
+        </div>
+        
+        {/* Card Header Typography */}
+        <h3 className="text-lg font-bold text-white tracking-tight mb-3">
+          {item.title}
+        </h3>
+        
+        {/* Balanced Copy Body with proper text-white contrast */}
+        <p className="text-sm text-white/70 group-hover:text-white/80 leading-relaxed font-normal transition-colors duration-200">
+          {item.description}
+        </p>
+      </div>
     </div>
-    <h3 className="text-base font-bold text-slate-900 tracking-tight mb-1.5">{title}</h3>
-    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">{description}</p>
   </div>
 );
 

@@ -84,12 +84,12 @@ const Navbar = () => {
 
   const navLinks = (
     <>
-      <Link className="text-slate-200 hover:text-sky-400" to="/">Home</Link>
-      <Link className="text-slate-200 hover:text-sky-400" to="/products">Products</Link>
-      <Link className="text-slate-200 hover:text-sky-400" to="/services">Services</Link>
-      <Link className="text-slate-200 hover:text-sky-400" to="/packages">Packages</Link>
-      <Link className="text-slate-200 hover:text-sky-400" to="/about">About</Link>
-      <Link className="text-slate-200 hover:text-sky-400" to="/contact">Contact</Link>
+      <Link className="text-white font-bold hover:text-[#030000]" to="/">Home</Link>
+      <Link className="text-white font-bold hover:text-[#030000]" to="/products">Products</Link>
+      <Link className="text-white font-bold hover:text-[#030000]" to="/services">Services</Link>
+      <Link className="text-white font-bold hover:text-[#030000]" to="/packages">Packages</Link>
+      <Link className="text-white font-bold hover:text-[#030000]" to="/about">About</Link>
+      <Link className="text-white font-bold hover:text-[#030000]" to="/contact">Contact</Link>
     </>
   );
 
@@ -104,15 +104,15 @@ const Navbar = () => {
   }, [user?._id]);
 
   return (
-    <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-slate-900 border-b border-slate-700">
-      <div className="text-2xl font-bold text-sky-400">SoftRiseHub</div>
+    <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-2 bg-[#2B3F43] border-b border-slate-700">
+      <div className="text-2xl font-bold text-white hover:text-[#030000]">SoftRise</div>
       <div className="hidden md:flex gap-8">{navLinks}</div>
       <div className="flex items-center gap-4 relative">
         <div className="cursor-pointer" onClick={() => toggleMenu("user")}>
           {user?.image?.url ? (
             <img className="w-8 h-8 rounded-full border border-sky-400" src={user.image.url} />
           ) : user ? (
-            <div className="w-8 h-8 flex items-center justify-center bg-sky-500 text-white text-xs font-bold rounded-full">
+            <div className="w-8 h-8 flex items-center justify-center bg-white text-white text-xs font-bold rounded-full hover:bg-[#030000] hover:text-[#030000]">
               {getInitials()}
             </div>
           ) : (
@@ -121,28 +121,29 @@ const Navbar = () => {
         </div>
 
         {activeMenu === "user" && (
-          <div ref={dropdownRef} className="absolute right-0 top-12 w-48 bg-slate-800 border border-slate-700 rounded-xl p-3 flex flex-col gap-2">
+          <div ref={dropdownRef} >
 
             {user ? (
               <>
-                <div className="text-sky-400 border-b border-slate-700 pb-1">
-                  {user.firstName} {user.lastName}
-                </div>
-                <Link className="text-slate-200 hover:bg-slate-700 px-2 py-1 rounded" to={`/users/${user._id}`} onClick={closeMenus}>
-                  My Account
+              <div className="absolute right-0 top-12 w-48 bg-[#2B3F43] border border-white rounded-[20px] p-3 flex flex-col gap-2">
+                <Link className="flex text-black justify-center font-bold bg-white px-1 py-2 rounded-[15px] hover:bg-green-500" to={`/users/${user._id}`} onClick={closeMenus}>
+                {user.firstName} {user.lastName}
                 </Link>
-                <button className="text-rose-400 hover:bg-rose-500/10 px-2 py-1 text-left rounded" onClick={handleLogout}>
+                <button className="flex text-black justify-center font-bold bg-white px-1 py-2 rounded-[15px] hover:bg-black hover:text-red-900" onClick={handleLogout}>
                   Logout
                 </button>
+                </div>
               </>
             ) : (
               <>
-                <Link className="bg-slate-700 text-center py-2 rounded" to="/login" onClick={closeMenus}>
+              <div className="absolute right-0 top-12 w-35 bg-[#2B3F43] border border-white rounded-[20px] p-3 flex flex-col gap-2">
+                <Link className="bg-black text-white text-center py-2 rounded-[15px] hover:text-[#030000] hover:font-bold hover:bg-green-700" to="/login" onClick={closeMenus}>
                   Login
                 </Link>
-                <Link className="bg-slate-700 text-center py-2 rounded" to="/signup" onClick={closeMenus}>
+                <Link className="bg-black text-white text-center py-2 rounded-[15px] hover:text-[#030000] hover:font-bold hover:bg-green-700" to="/signup" onClick={closeMenus}>
                   Sign Up
                 </Link>
+                </div>
               </>
             )}
           </div>

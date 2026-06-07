@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 const Products = () => {
   const [projects, setProjects] = useState([]);
+
   const getProjects = async () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/project/all`, { withCredentials: true });
@@ -22,7 +23,7 @@ const Products = () => {
         const resp = JSON.parse(event.data);
         if (resp && resp.Projects) setProjects(resp.Projects);
       } catch (error) {
-        console.log("Parsing have an error", error);
+        console.log("Parsing error:", error);
       }
     };
     result.onerror = (error) => {
@@ -34,42 +35,67 @@ const Products = () => {
   const visibleProjects = projects.slice(0, 5);
 
   return (
-    <section className="relative py-12 md:py-24 bg-gradient-to-b from-white via-sky-50/40 to-white overflow-hidden">
-      <div className="absolute top-10 left-10 w-48 h-48 md:w-72 md:h-72 bg-sky-200/30 blur-[80px] md:blur-[120px] rounded-full" />
-      <div className="absolute bottom-10 right-10 w-48 h-48 md:w-72 md:h-72 bg-blue-200/30 blur-[80px] md:blur-[120px] rounded-full" />
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-10 md:mb-14">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">Digital Solutions We Have Built</h2>
-          <p className="mt-3 md:mt-4 text-sm sm:text-base text-slate-600 max-w-3xl mx-auto leading-relaxed">We develop web, mobile, and enterprise applications that are designed to be reliable, scalable, and easy to use, helping businesses operate more efficiently and grow with confidence.</p>
+    <section className="py-12 md:py-20 bg-white border-t border-slate-100 font-sans">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#2B3F43]">
+            Digital Solutions We Have Built
+          </h2>
+          <p className="mt-3 text-[16px] text-back max-w-3xl mx-auto leading-relaxed">
+            We develop web, mobile, and enterprise applications that are designed to be reliable, scalable, and easy to use, helping businesses operate more efficiently and grow with confidence.
+          </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
           {visibleProjects.map((project) => (
-            <div key={project._id} className="group flex flex-col justify-between bg-white rounded-3xl overflow-hidden border border-sky-100 shadow-sm hover:shadow-xl hover:shadow-sky-100 hover:border-sky-300 hover:-translate-y-2 transition-all duration-500">
-              <div className="w-full">
-                <div className="relative h-48 sm:h-56 overflow-hidden">
-                  <img src={project?.images?.[0]?.url} alt={project.name} className="w-full h-full object-cover group-hover:scale-110 transition duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+            <div 
+              key={project._id} 
+              className="flex flex-col justify-between bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm"
+            >
+              <div className="w-full flex flex-col h-full">
+                {/* Thumbnail Container */}
+                <div className="relative h-40 sm:h-44 overflow-hidden bg-slate-50 shrink-0">
+                  <img 
+                    src={project?.images?.[0]?.url} 
+                    alt={project.name} 
+                    className="w-full h-full object-cover" 
+                  />
                 </div>
-                <div className="p-5 sm:p-6">
-                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-2 sm:mb-3 group-hover:text-sky-600 transition line-clamp-2">{project.name}</h3>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-3">{project.description}</p>
-                </div>
-              </div>
-              <div className="p-5 sm:p-6 pt-0">
-                <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                  <span className="text-xs text-slate-500">{project.startingDate}</span>
-                  <span className="text-xs sm:text-sm font-medium text-sky-600">View Project →</span>
+
+                {/* Card Content Block */}
+                <div className="p-4 sm:p-5 bg-[#2B3F43] flex-grow flex flex-col justify-between text-white">
+                  <div>
+                    <h3 className="text-base sm:text-lg font-bold text-white mb-1.5 line-clamp-2">
+                      {project.name}
+                    </h3>
+                    <p className="text-xs sm:text-[13px] text-slate-200 leading-relaxed line-clamp-3 mb-4">
+                      {project.description}
+                    </p>
+                  </div>
+
+                  {/* Metadata and Link Footer */}
+                  <div className="flex items-center justify-between pt-3 border-t border-white/10 mt-auto">
+                    <span className="text-[11px] text-slate-300 font-medium">
+                      {project.startingDate}
+                    </span>
+                    <span className="text-xs sm:text-[13px] font-semibold text-white flex items-center gap-1">
+                      View Project <ArrowRight size={14} />
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
           ))}
-          <Link to="/projects" className="group rounded-3xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center min-h-[320px] sm:min-h-[360px] shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
-            <div className="text-center px-6 sm:px-8 text-white">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-4 sm:mb-5">
-                <ArrowRight size={24} className="group-hover:translate-x-1 transition" />
-              </div>
-              <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">View All Projects</h3>
-              <p className="text-white/90 text-xs sm:text-sm leading-relaxed">Explore our complete range of web, mobile, and enterprise solutions built for modern businesses.</p>
+
+          {/* "View All Projects" Link Card */}
+          <Link 
+            to="/projects" 
+            className="rounded-2xl bg-[#2B3F43] flex items-center justify-center min-h-[250px] sm:min-h-[280px] shadow-sm p-6 text-center"
+          >
+            <div className="flex text-white gap-2 justify-center items-center">
+              <h3 className="text-lg sm:text-xl font-bold mb-1.5">View All </h3> 
+              <ArrowRight size={20} className="text-white" />
             </div>
           </Link>
         </div>

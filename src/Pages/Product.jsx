@@ -1,118 +1,105 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import events from "../../events";
-import { useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
-const Product = () => {
+const ProductPage = () => {
     const [projects, setProjects] = useState([]);
-    const navigate = useNavigate();
 
     const getProjects = async () => {
         try {
-            const res = await axios.get(
-                `${import.meta.env.VITE_API_URL}/api/v1/project/all`,
-                { withCredentials: true }
-            );
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/project/all`, { withCredentials: true });
             setProjects(res.data.Projects);
         } catch (err) {
-            console.log(err);
+            console.error("Error fetching projects:", err);
         }
     };
 
     useEffect(() => {
         getProjects();
-
-        const result = new EventSource(`${import.meta.env.VITE_API_URL}/api/v1/project/all`,
-            { withCredentials: true })
+        const result = new EventSource(`${import.meta.env.VITE_API_URL}/api/v1/project/all`, { withCredentials: true });
+        
         result.onmessage = (event) => {
             try {
-                const resp = JSON.parse(event.data)
-                if (resp && resp.Projects) {
-                    setProjects(resp.Projects)
-                }
+                const resp = JSON.parse(event.data);
+                if (resp && resp.Projects) setProjects(resp.Projects);
             } catch (error) {
-                console.log("Parsing have an error", error);
+                console.error("Parsing error:", error);
             }
-        }
+        };
+
         result.onerror = (error) => {
-            console.log("EventSource is not working", error);
-        }
-        return () => (
-            result.close()
-        )
+            console.error("EventSource connectivity failure:", error);
+        };
+
+        return () => result.close();
     }, []);
 
     return (
-        <section className="min-h-screen py-24 bg-slate-50 text-slate-900 relative overflow-hidden font-sans">
-            <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 relative z-10">
+        <section className="py-12 md:py-20 bg-white border-t border-slate-100 font-sans">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-                <div className="text-center mb-16">
-                    <p className="text-blue-600 text-[11px] tracking-[0.35em] uppercase font-bold mb-3">
-                        / Industry Work
-                    </p>
-                    <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 mb-4">
-                        Selected Expertise
-                    </h1>
-                    <p className="text-slate-500 max-w-xl mx-auto text-sm leading-relaxed">
-                        A curated collection of engineered systems and digital solutions.
+                {/* Section Header */}
+                <div className="text-center mb-10 md:mb-16">
+                    <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#2B3F43]">
+                        Digital Solutions We Have Built
+                    </h2>
+                    <p className="mt-3 text-base text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                        We develop web, mobile, and enterprise applications that are designed to be reliable, scalable, and easy to use, helping businesses operate more efficiently and grow with confidence.
                     </p>
                 </div>
 
-                <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
-                    {projects?.map((project) => (
-                        <div
-                            key={project._id}
-                            onClick={() => navigate(`/projectview/${project._id}`)}
-                            className="group relative w-full max-w-[280px] rounded-2xl overflow-hidden bg-white border border-slate-200 hover:border-slate-300 hover:shadow-[0_20px_40px_-15px_rgba(15,23,42,0.06)] active:scale-[0.99] transition-all duration-200 cursor-pointer flex flex-col justify-between"
-                        >
-                            <div>
-                                <div className="relative h-40 w-full bg-slate-100 overflow-hidden border-b border-slate-100">
-                                    <img
-                                        src={project?.images?.[0].url}
-                                        alt={project?.name}
-                                        className="w-full h-full object-cover group-hover:scale-[1.02] transition duration-300"
-                                    />
-                                    <div className="absolute top-3 left-3">
-                                        <span className={`text-[10px] px-2.5 py-1 rounded-md font-bold tracking-wider uppercase border shadow-sm
-                                            ${project?.endDate
-                                                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                                                : "bg-amber-50 text-amber-700 border-amber-200"
-                                            }`}
-                                        >
-                                            {project?.endDate ? "Done" : "Active"}
-                                        </span>
+                {/* Layout Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+                    {projects.map((project) => {
+                        const image = project?.images?.[0]?.url || "/logo.png";
+                        return (
+                            <div
+                                key={project._id}
+                                className="group flex flex-col justify-between bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 relative"
+                            >
+                                <div className="w-full flex flex-col h-full">
+                                    {/* Image Container */}
+                                    <div className="relative h-44 sm:h-48 overflow-hidden bg-slate-50 shrink-0">
+                                        <img
+                                            src={image}
+                                            alt={project.name}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                        />
+                                    </div>
+
+                                    {/* Inverted Card Info Box */}
+                                    <div className="p-5 bg-[#2B3F43] flex-grow flex flex-col justify-between text-white">
+                                        <div className="mb-4">
+                                            <h3 className="text-base sm:text-lg font-bold text-white mb-2 line-clamp-1 group-hover:text-white/90 transition-colors">
+                                                {project.name}
+                                            </h3>
+                                            <p className="text-xs sm:text-[13px] text-slate-200 leading-relaxed line-clamp-3">
+                                                {project.description}
+                                            </p>
+                                        </div>
+
+                                        {/* Dynamic Redirect Footer */}
+                                        <div className="flex items-center justify-between pt-4 border-t border-white/10 mt-auto">
+                                            <span className="text-[11px] text-slate-300 font-mono">
+                                                {project.startingDate || "In Development"}
+                                            </span>
+                                            <Link 
+                                                to={`/projectview/${project._id}`}
+                                                className="text-xs sm:text-[13px] font-semibold text-white flex items-center gap-1.5 hover:underline decoration-white/40 underline-offset-4"
+                                            >
+                                                View Project <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-200" />
+                                            </Link>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div className="p-5">
-                                    <h3 className="text-sm font-bold text-slate-900 mb-1.5 group-hover:text-blue-600 transition line-clamp-1 tracking-tight">
-                                        {project?.name}
-                                    </h3>
-                                    <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed font-normal">
-                                        {project?.description}
-                                    </p>
-                                </div>
                             </div>
-
-                            <div className="px-5 pb-5 pt-2 flex items-center justify-between text-[11px] font-medium border-t border-slate-50">
-                                <span className="text-slate-400">{project?.startingDate}</span>
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        navigate(`/projectview/${project._id}`);
-                                    }}
-                                    className="text-blue-600 font-bold hover:text-blue-700 transition"
-                                >
-                                    View Details →
-                                </button>
-                            </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
-
             </div>
         </section>
     );
 };
 
-export default Product;
+export default ProductPage;

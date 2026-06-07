@@ -12,13 +12,14 @@ import AdminDashboard from "./Pages/Admindashbord.jsx";
 import ServicePage from "./Pages/Service.jsx";
 import Contact from "./Pages/Contact.jsx";
 import ScrollToTop from "./Components/ScrollToTop.js";
-import Products from "./Components/Products.jsx";
 import FAQ from "./Pages/Questionandanswer.jsx";
 import Careers from "./Pages/Careers.jsx";
 import Blogs from "./Pages/Blogs.jsx";
 import Privacy from "./Pages/Privacy.jsx";
 import Terms from "./Pages/Terms.jsx";
 import Footer from "./Components/Footer.jsx";
+import ProductPage from "./Pages/Product.jsx";
+import TeamPage from "./Pages/TeamPage.jsx";
 
 const App = () => {
   return (
@@ -27,7 +28,7 @@ const App = () => {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
+        <Route path="/products" element={<ProductPage/>} />
         <Route path="/services" element={<ServicePage />} />
         <Route path="/projectview/:id" element={<ProjectView />} />
         <Route path="/packages" element={<Packages />} />
@@ -42,6 +43,7 @@ const App = () => {
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/team" element={<TeamPage />} />
       </Routes>
       <Footer />
 
