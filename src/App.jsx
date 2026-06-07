@@ -20,6 +20,7 @@ import Terms from "./Pages/Terms.jsx";
 import Footer from "./Components/Footer.jsx";
 import ProductPage from "./Pages/Product.jsx";
 import TeamPage from "./Pages/TeamPage.jsx";
+import ServiceView from "./Components/ServiceView.jsx";
 
 const App = () => {
   return (
@@ -37,6 +38,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/users/:id" element={<Profile />} />
+        <Route path="/service/:id" element={<ServiceView />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/FAQs" element={<FAQ />} />
         <Route path="/careers" element={<Careers />} />
