@@ -58,144 +58,167 @@ const Signup = () => {
   };
 
   return (
-    <div className="w-full min-h-[100dvh] flex flex-col justify-center items-center bg-slate-50 text-slate-900 font-sans antialiased px-4 py-12 selection:bg-slate-900 selection:text-white">
-      <div className="w-full max-w-md mx-auto flex flex-col justify-center">
-        
-        {/* Header Block */}
-        <div className="text-center mb-8">
-          <span className="text-xs font-bold uppercase tracking-[0.25em] text-blue-600 block mb-3">
-            SoftRiseHub
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-slate-50 font-sans antialiased">
+            <div className="hidden lg:flex lg:col-span-5 bg-white border-r border-slate-100 p-12 flex-col justify-between relative overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.3] pointer-events-none grid grid-cols-3">
+          <div className="border-r border-slate-100 h-full"></div>
+          <div className="border-r border-slate-100 h-full"></div>
+        </div>
+
+        <div className="relative z-2">
+          <span className="text-xs font-bold tracking-[0.2em] text-[#2B3F43] uppercase">
+            / SoftRiseHub Registration
           </span>
-          <h1 className="text-3xl font-black tracking-tight text-slate-900">
-            Create account
-          </h1>
-          <p className="mt-2 text-sm text-slate-500 font-normal">
+        </div>
+
+        <div className="space-y-4 relative z-10 max-w-sm">
+          <h1 className="text-3xl font-black tracking-tight text-[#2B3F43] leading-tight">
             Build and deploy commercial-grade systems.
+          </h1>
+          <p className="text-sm text-slate-500 leading-relaxed">
+            Create an account to deploy isolated workspaces, access custom platform components, review production proof-of-work modules, and scale solutions.
           </p>
         </div>
 
-        {/* Form Grid Layer */}
-        <form onSubmit={handleSubmit} className="w-full bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-[0_24px_48px_-12px_rgba(15,23,42,0.04)] space-y-4">
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div className="w-full min-w-0">
-              <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-                First Name
-              </label>
-              <input
-                name="firstName"
-                type="text"
-                required
-                placeholder="John"
-                value={formData.firstName}
-                onChange={handleChange}
-                className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm border border-slate-200 rounded-lg placeholder-slate-300 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition"
-              />
-            </div>
-
-            <div className="w-full min-w-0">
-              <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-                Last Name
-              </label>
-              <input
-                name="lastName"
-                type="text"
-                required
-                placeholder="Doe"
-                value={formData.lastName}
-                onChange={handleChange}
-                className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm border border-slate-200 rounded-lg placeholder-slate-300 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition"
-              />
-            </div>
-          </div>
-
-          <div className="w-full">
-            <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-              Email Address
-            </label>
-            <input
-              name="email"
-              type="email"
-              required
-              placeholder="name@company.com"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm border border-slate-200 rounded-lg placeholder-slate-300 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition"
-            />
-          </div>
-
-          <div className="w-full">
-            <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-              Password
-            </label>
-            <div className="relative w-full">
-              <input
-                name="password"
-                type={showPassword ? "text" : "password"}
-                required
-                placeholder="••••••••"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm border border-slate-200 rounded-lg pr-10 placeholder-slate-300 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 transition"
-              >
-                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
-            </div>
-          </div>
-
-          <div className="w-full">
-            <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-              Phone Number
-            </label>
-            <input
-              name="phoneNumber"
-              type="tel"
-              required
-              placeholder="+1 (555) 000-0000"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm border border-slate-200 rounded-lg placeholder-slate-300 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition"
-            />
-          </div>
-
-          <div className="w-full">
-            <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-              Country
-            </label>
-            <input
-              name="country"
-              type="text"
-              required
-              placeholder="United States"
-              value={formData.country}
-              onChange={handleChange}
-              className="w-full px-3.5 py-2.5 bg-white text-slate-900 text-sm border border-slate-200 rounded-lg placeholder-slate-300 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full mt-2 bg-slate-900 text-white text-sm font-bold py-3 px-4 rounded-lg hover:bg-slate-800 active:scale-[0.99] transition duration-150 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
-          >
-            {loading ? "Creating account..." : "Continue"}
-          </button>
-        </form>
-
-        {/* Bottom Link Layout */}
-        <div className="w-full text-center text-sm text-slate-500 font-normal mt-6">
-          Already have an account?{" "}
-          <Link to="/login" className="text-slate-900 font-bold hover:underline">
-            Sign in
-          </Link>
+        <div className="relative z-10 text-xs text-slate-400 font-medium">
+          © SoftRiseHub. All rights reserved.
         </div>
-
       </div>
+
+      <div className="col-span-1 lg:col-span-7 flex items-center justify-center p-4 sm:p-12 md:p-16 bg-slate-50">
+        <div className="w-full max-w-md bg-[#2B3F43] rounded-2xl p-6 sm:p-10 shadow-xl border border-[#2B3F43] transition-all duration-300 my-8">
+          <div className="mb-6">
+            <h2 className="text-2xl font-black text-white tracking-tight">
+              Create Account
+            </h2>
+            <p className="text-sm text-slate-300 mt-1">
+              Initialize your environment with a developer platform.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold text-sky-300 uppercase tracking-wider mb-1.5">
+                  First Name
+                </label>
+                <input
+                  name="firstName"
+                  type="text"
+                  required
+                  placeholder="John"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-400 shadow-sm focus:outline-none focus:border-sky-400 focus:bg-white/10 transition duration-200 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-sky-300 uppercase tracking-wider mb-1.5">
+                  Last Name
+                </label>
+                <input
+                  name="lastName"
+                  type="text"
+                  required
+                  placeholder="Doe"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-400 shadow-sm focus:outline-none focus:border-sky-400 focus:bg-white/10 transition duration-200 text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-sky-300 uppercase tracking-wider mb-1.5">
+                Email Address
+              </label>
+              <input
+                name="email"
+                type="email"
+                required
+                placeholder="name@company.com"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-400 shadow-sm focus:outline-none focus:border-sky-400 focus:bg-white/10 transition duration-200 text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-sky-300 uppercase tracking-wider mb-1.5">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-400 pr-10 shadow-sm focus:outline-none focus:border-sky-400 focus:bg-white/10 transition duration-200 text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3 text-slate-400 hover:text-white transition"
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-sky-300 uppercase tracking-wider mb-1.5">
+                Phone Number
+              </label>
+              <input
+                name="phoneNumber"
+                type="tel"
+                required
+                placeholder="+1 (555) 000-0000"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-400 shadow-sm focus:outline-none focus:border-sky-400 focus:bg-white/10 transition duration-200 text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-sky-300 uppercase tracking-wider mb-1.5">
+                Country
+              </label>
+              <input
+                name="country"
+                type="text"
+                required
+                placeholder="United States"
+                value={formData.country}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-400 shadow-sm focus:outline-none focus:border-sky-400 focus:bg-white/10 transition duration-200 text-sm"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 px-4 bg-white hover:bg-slate-100 disabled:bg-white/20 text-[#2B3F43] disabled:text-white/40 font-bold rounded-xl active:scale-[0.99] transition duration-150 text-sm shadow-md cursor-pointer disabled:cursor-not-allowed flex items-center justify-center pt-3"
+            >
+              {loading ? "Creating account..." : "Complete Registration"}
+            </button>
+          </form>
+
+          {/* Navigational Anchor Footer */}
+          <div className="mt-6 pt-6 border-t border-white/10 text-xs sm:text-sm text-slate-300 flex flex-col sm:flex-row gap-2 justify-between items-center">
+            <span>Already have an account?</span>
+            <Link to="/login" className="text-white font-bold hover:underline tracking-tight">
+              Sign in to SoftRiseHub
+            </Link>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { CheckCircle2 } from "lucide-react";
+import Footer from "../Components/Footer";
 
 const Packages = () => {
   const [packages, setPackages] = useState([]);
@@ -21,6 +22,7 @@ const Packages = () => {
   }, []);
 
   return (
+    <>
     <div className="min-h-screen bg-slate-50/90 py-16 md:py-24 px-4 sm:px-6 lg:px-8 font-sans">
       
       {/* Section Header */}
@@ -97,6 +99,8 @@ const Packages = () => {
       </div>
 
     </div>
+    <Footer />
+    </>
   );
 };
 

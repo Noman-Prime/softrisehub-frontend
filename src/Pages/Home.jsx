@@ -26,6 +26,7 @@ const Home = () => {
             <Services />
             <Team />
             <Toplans />
+            <Footer />
         </div>
     );
 };

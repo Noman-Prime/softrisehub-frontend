@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Layers } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Footer from "../Components/Footer";
 
 const ServicePage = () => {
   const [service, setService] = useState([]);
@@ -37,6 +38,7 @@ const ServicePage = () => {
   }, []);
 
   return (
+    <>
     <section className="py-12 md:py-20 bg-white border-t border-slate-100 font-sans">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
 
@@ -96,6 +98,8 @@ const ServicePage = () => {
 
       </div>
     </section>
+    <Footer />
+    </>
   );
 };
 

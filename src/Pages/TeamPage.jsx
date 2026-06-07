@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FaGithub, FaLinkedinIn } from "react-icons/fa6";
+import { User } from "lucide-react";
+import Footer from "../Components/Footer";
 
 const TeamPage = () => {
     const [team, setTeam] = useState([]);
@@ -34,7 +35,14 @@ const TeamPage = () => {
         return () => getUpdatedData.close();
     }, []);
 
+    // Filter out administration profiles (admin/owner) for privacy and protection
+    const publicEngineers = team.filter((developer) => {
+        const role = (developer?.role || "").toLowerCase();
+        return role !== "admin" && role !== "owner";
+    });
+
     return (
+        <>
         <section className="relative py-12 md:py-20 px-4 sm:px-6 bg-white overflow-hidden border-t border-slate-100 font-sans">
             <div className="max-w-7xl mx-auto relative z-10">
 
@@ -43,46 +51,51 @@ const TeamPage = () => {
                         Our Engineering Team
                     </h2>
                     <p className="text-slate-600 text-sm leading-relaxed">
-                        Real-time directory of system developers, cloud architects, and engineering specialists ready to build solutions.
+                        Real-time directory of verified core developers and technical specialists executing operations.
                     </p>
                 </div>
 
                 {/* Card Layouts */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {team.map((developer) => {
-                        const image = developer.image?.url || "/logo.png";
+                    {publicEngineers.map((developer) => {
+                        const hasImage = developer.image?.url;
+                        
+                        // Extract initials safely from firstName and lastName
+                        const fInitial = developer.firstName ? developer.firstName.charAt(0).toUpperCase() : "";
+                        const lInitial = developer.lastName ? developer.lastName.charAt(0).toUpperCase() : "";
+                        const initials = fInitial || lInitial ? `${fInitial}${lInitial}` : (developer.name ? developer.name.charAt(0).toUpperCase() : "T");
+
                         return (
                             <div
                                 key={developer._id || developer.id}
-                                className="group flex flex-col justify-between border rounded-2xl p-6 text-center bg-[#2B3F43] border-[#2B3F43] hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden shadow-sm hover:shadow-xl"
+                                className="group flex flex-col justify-between border rounded-2xl p-6 text-center bg-[#2B3F43] border-[#2B3F43] hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden shadow-sm hover:shadow-xl min-h-[280px] sm:min-h-[320px]"
                             >
-                                <div className="w-full">
-                                    <div className="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto mb-4">
-                                        <img
-                                            src={image}
-                                            alt={developer.firstName || "Developer"}
-                                            className="w-full h-full object-cover rounded-full border-2 border-white p-0.5 bg-white shadow-sm transition-transform duration-300 group-hover:scale-105"
-                                        />
+                                <div className="w-full my-auto">
+                                    {/* Upgraded Image Container Matrix Size to w-36 h-36 */}
+                                    <div className="relative w-36 h-36 mx-auto mb-6">
+                                        {hasImage ? (
+                                            <img
+                                                src={developer.image.url}
+                                                alt={developer.firstName || "Developer"}
+                                                className="w-full h-full object-cover rounded-full border-2 border-white/20 p-0.5 bg-white/5 shadow-sm transition-transform duration-300 group-hover:scale-105"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full rounded-full border-2 border-white/20 bg-white/10 text-white flex items-center justify-center text-3xl font-black tracking-wider shadow-sm transition-transform duration-300 group-hover:scale-105 select-none">
+                                                {initials}
+                                            </div>
+                                        )}
                                     </div>
 
-                                    <h3 className="text-base font-bold text-slate-800 group-hover:text-white transition-colors duration-200 truncate px-1">
+                                    <h3 className="text-base font-bold text-white tracking-tight truncate px-1">
                                         {developer.firstName ? `${developer.firstName} ${developer.lastName || ""}` : developer.name || "Team Member"}
                                     </h3>
-                                    <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-sky-600 group-hover:text-sky-300 mt-1 mb-1.5 capitalize">
-                                        {developer.role || "Developer"}
-                                    </p>
-                                    <p className="text-xs text-slate-500 group-hover:text-slate-300 font-mono mb-4 truncate max-w-full px-2 transition-colors duration-200">
-                                        {developer.email}
-                                    </p>
-                                </div>
-
-                                <div className="flex justify-center gap-4 pt-3 border-t border-slate-200/60 group-hover:border-white/10 mt-auto">
-                                    <a href="#" className="text-slate-400 group-hover:text-sky-300 hover:scale-110 transition-all duration-200">
-                                        <FaLinkedinIn className="text-sm" size={20} />
-                                    </a>
-                                    <a href="#" className="text-slate-400 group-hover:text-white hover:scale-110 transition-all duration-200">
-                                        <FaGithub className="text-sm" size={20} />
-                                    </a>
+                                    
+                                    <div className="inline-flex items-center gap-1.5 mt-2.5 px-3 py-1 bg-white/5 border border-white/10 rounded-lg">
+                                        <User size={12} className="text-sky-300" />
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-sky-300 capitalize">
+                                            {developer.role || "Developer"}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         );
@@ -90,6 +103,8 @@ const TeamPage = () => {
                 </div>
             </div>
         </section>
+        <Footer />
+        </>
     );
 };
 

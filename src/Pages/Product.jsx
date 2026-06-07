@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import Footer from "../Components/Footer";
 
 const ProductPage = () => {
     const [projects, setProjects] = useState([]);
@@ -36,6 +37,7 @@ const ProductPage = () => {
     }, []);
 
     return (
+        <>
         <section className="py-12 md:py-20 bg-white border-t border-slate-100 font-sans">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
@@ -99,6 +101,8 @@ const ProductPage = () => {
                 </div>
             </div>
         </section>
+        <Footer />
+        </>
     );
 };
 

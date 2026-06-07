@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Code2, Layers, Sparkles, Globe, Rocket, ShieldCheck, HelpCircle } from "lucide-react";
+import Footer from "../Components/Footer";
 
 // INDUSTRY-STANDARD PRODUCTION SCHEMA
 const CORE_CAPABILITIES_DATA = [
@@ -66,6 +67,7 @@ const About = () => {
   const categories = [...new Set(capabilities.map(item => item.category))];
 
   return (
+    <>
     <section className="min-h-screen bg-slate-50 py-24 lg:py-36 px-4 sm:px-6 lg:px-8 font-sans text-slate-900 relative overflow-hidden antialiased">
       
       {/* High-End Ambient Gradient Fields */}
@@ -138,9 +140,10 @@ const About = () => {
 
       </div>
     </section>
+    <Footer />
+    </>
   );
 };
-
 /* Micro-Engineered Brand Colored Card Framework */
 const CapabilityCard = ({ item }) => (
   <div className="group p-8 rounded-2xl bg-[#2B3F43] border border-white/[0.03] shadow-[0_4px_20px_-4px_rgba(43,63,67,0.12)] flex flex-col justify-between items-start transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-12px_rgba(43,63,67,0.3)] relative overflow-hidden h-full min-h-[260px]">

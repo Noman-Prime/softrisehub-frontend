@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Footer from "../Components/Footer";
 
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -27,6 +28,7 @@ const FAQ = () => {
   };
 
   return (
+    <>
     <section className="py-24 bg-slate-50 text-slate-900 font-sans">
       <div className="max-w-3xl mx-auto px-6">
         
@@ -85,7 +87,11 @@ const FAQ = () => {
         
       </div>
     </section>
+    <Footer />
+    </>
   );
 };
 
 export default FAQ;
+
+{/* it is not comleted yet */}

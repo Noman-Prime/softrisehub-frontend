@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Footer from "../Components/Footer";
 
 const Terms = () => {
   const lastUpdated = "June 06, 2026";
@@ -36,15 +37,16 @@ const Terms = () => {
   ];
 
   return (
-    <div className="w-full min-h-[100dvh] bg-slate-50 text-slate-900 font-sans antialiased px-4 sm:px-6 lg:px-8 py-20 selection:bg-slate-900 selection:text-white">
+    <>    
+    <div className="w-full min-h-[100dvh] bg-white text-[#2B3F43] font-sans antialiased px-4 sm:px-6 lg:px-8 py-20 selection:bg-[#2B3F43] selection:text-white">
       <div className="max-w-5xl mx-auto">
         
         {/* HEADER BLOCK */}
-        <div className="w-full border-b border-slate-200 pb-10 mb-16 text-left">
-          <span className="text-xs font-bold uppercase tracking-[0.25em] text-blue-600 block mb-3">
+        <div className="w-full border-b border-slate-100 pb-10 mb-16 text-left">
+          <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#2B3F43] block mb-3 opacity-80">
             / Corporate Governance
           </span>
-          <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-[#2B3F43]">
             Terms of Service
           </h1>
           <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 font-mono">
@@ -60,16 +62,16 @@ const Terms = () => {
             <section
               key={term.id}
               id={term.id}
-              className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 pt-10 first:pt-0 border-t border-slate-200/60 first:border-0"
+              className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 pt-10 first:pt-0 border-t border-slate-100 first:border-0"
             >
               {/* Sidebar Identity Column */}
               <div className="md:col-span-4 text-left">
                 <div className="flex items-start gap-3">
-                  <span className="font-mono text-xs font-bold text-blue-600 bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded">
+                  <span className="font-mono text-xs font-bold text-white bg-[#2B3F43] border border-[#2B3F43] px-2 py-0.5 rounded-md shadow-sm">
                     {term.number}
                   </span>
                   <div>
-                    <h2 className="text-base font-black text-slate-900 tracking-tight">
+                    <h2 className="text-base font-bold text-[#2B3F43] tracking-tight">
                       {term.title}
                     </h2>
                     <p className="mt-2 text-xs text-slate-500 font-normal leading-relaxed">
@@ -80,8 +82,8 @@ const Terms = () => {
               </div>
 
               {/* Main Structural Narrative Box */}
-              <div className="md:col-span-8 bg-white border border-slate-200/80 rounded-xl p-6 sm:p-8 shadow-sm text-left">
-                <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed">
+              <div className="md:col-span-8 bg-[#2B3F43] border border-[#2B3F43] rounded-2xl p-6 sm:p-8 shadow-sm text-left">
+                <p className="text-xs sm:text-sm text-slate-200 font-normal leading-relaxed">
                   {term.details}
                 </p>
               </div>
@@ -90,19 +92,19 @@ const Terms = () => {
         </div>
 
         {/* ACTION PANEL */}
-        <div className="w-full bg-white border border-slate-200 rounded-xl p-6 sm:p-8 text-left shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div className="w-full bg-[#2B3F43] border border-[#2B3F43] rounded-2xl p-6 sm:p-8 text-left shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div className="max-w-xl">
-            <h3 className="text-sm font-bold text-slate-900 tracking-tight">
+            <h3 className="text-sm font-bold text-white tracking-tight">
               Need custom enterprise SLA parameters?
             </h3>
-            <p className="text-xs text-slate-500 font-normal mt-1 leading-relaxed">
+            <p className="text-xs text-slate-300 font-normal mt-1 leading-relaxed">
               If your corporate structure or production environment requires isolated database clusters, custom liability bounds, or legal modifications, contact our legal node.
             </p>
           </div>
           <div className="shrink-0">
             <Link
               to="/contact"
-              className="inline-block px-4 py-2.5 bg-slate-900 text-white text-xs font-bold rounded-lg hover:bg-slate-800 transition active:scale-[0.98]"
+              className="inline-block px-4 py-2.5 bg-white text-[#2B3F43] text-xs font-bold rounded-xl hover:bg-slate-50 transition active:scale-[0.98] shadow-sm"
             >
               Request SLA
             </Link>
@@ -111,7 +113,11 @@ const Terms = () => {
 
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 
 export default Terms;
+
+{/* it is not completed yet */}

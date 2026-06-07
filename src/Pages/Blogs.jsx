@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Footer from "../Components/Footer";
 
 const Blogs = () => {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -53,6 +54,7 @@ const Blogs = () => {
   const regularPosts = filteredPosts.filter(post => !post.isFeatured || activeCategory !== "all");
 
   return (
+    <>
     <div className="w-full min-h-[100dvh] bg-slate-50 text-slate-900 font-sans antialiased px-4 sm:px-6 lg:px-8 py-20 selection:bg-slate-900 selection:text-white">
       <div className="max-w-6xl mx-auto">
         
@@ -166,6 +168,8 @@ const Blogs = () => {
 
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 

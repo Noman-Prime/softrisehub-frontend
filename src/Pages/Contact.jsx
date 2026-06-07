@@ -1,8 +1,10 @@
 import React from "react";
 import { Mail, MapPin, ArrowRight, CheckCircle2, AlertCircle } from "lucide-react";
+import Footer from "../Components/Footer.jsx"
 
 const Contact = () => {
   return (
+    <>
     <section className="min-h-screen bg-slate-50 text-slate-900 flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8 font-sans antialiased relative overflow-hidden">
       
       {/* Structural Ambient Background Details */}
@@ -114,6 +116,8 @@ const Contact = () => {
 
       </div>
     </section>
+    <Footer />
+    </>
   );
 };
 

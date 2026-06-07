@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -69,21 +69,21 @@ const Login = () => {
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-slate-50 font-sans">
       
       {/* Left Column: Brand Context Panel (Hidden on Mobile) */}
-      <div className="hidden lg:flex lg:col-span-5 bg-white border-r border-slate-200 p-12 flex-col justify-between relative overflow-hidden">
-        {/* Subtle structural grid line background */}
-        <div className="absolute inset-0 opacity-[0.4] pointer-events-none grid grid-cols-3">
+      <div className="hidden lg:flex lg:col-span-5 bg-white border-r border-slate-100 p-12 flex-col justify-between relative overflow-hidden">
+        {/* Subtle geometric structural grid lines */}
+        <div className="absolute inset-0 opacity-[0.3] pointer-events-none grid grid-cols-3">
           <div className="border-r border-slate-100 h-full"></div>
           <div className="border-r border-slate-100 h-full"></div>
         </div>
 
         <div className="relative z-10">
-          <span className="text-xs font-bold tracking-[0.2em] text-blue-600 uppercase">
+          <span className="text-xs font-bold tracking-[0.2em] text-[#2B3F43] uppercase">
             / SoftRiseHub Portal
           </span>
         </div>
 
         <div className="space-y-4 relative z-10 max-w-sm">
-          <h1 className="text-3xl font-black tracking-tight text-slate-900 leading-tight">
+          <h1 className="text-3xl font-black tracking-tight text-[#2B3F43] leading-tight">
             Manage your digital workspace.
           </h1>
           <p className="text-sm text-slate-500 leading-relaxed">
@@ -96,16 +96,16 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Right Column: Centered Form Context Block */}
-      <div className="col-span-1 lg:col-span-7 flex items-center justify-center p-6 sm:p-12 md:p-20">
-        <div className="w-full max-w-md">
+      {/* Right Column: Solid Brand Layout Context Block */}
+      <div className="col-span-1 lg:col-span-7 flex items-center justify-center p-4 sm:p-12 md:p-20 bg-slate-50">
+        <div className="w-full max-w-md bg-[#2B3F43] rounded-2xl p-8 sm:p-10 shadow-xl border border-[#2B3F43] transition-all duration-300">
           
           {/* Header Block */}
           <div className="mb-8">
-            <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-2xl font-black text-white tracking-tight">
               Sign In
             </h2>
-            <p className="text-sm text-slate-500 mt-1">
+            <p className="text-sm text-slate-300 mt-1">
               Enter your authorized credentials to view dashboards.
             </p>
           </div>
@@ -113,7 +113,7 @@ const Login = () => {
           {/* Interactive Form Element */}
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="email" className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+              <label htmlFor="email" className="block text-xs font-bold text-sky-300 uppercase tracking-wider mb-2">
                 Email Address
               </label>
               <input
@@ -124,13 +124,13 @@ const Login = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="alex@company.com"
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 shadow-sm focus:outline-none focus:border-slate-900 transition duration-200 text-sm"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-400 shadow-sm focus:outline-none focus:border-sky-400 focus:bg-white/10 transition duration-200 text-sm"
               />
             </div>
 
             <div>
               <div className="flex justify-between items-center mb-2">
-                <label htmlFor="password" className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <label htmlFor="password" className="block text-xs font-bold text-sky-300 uppercase tracking-wider">
                   Password
                 </label>
               </div>
@@ -143,12 +143,12 @@ const Login = () => {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 pr-10 shadow-sm focus:outline-none focus:border-slate-900 transition duration-200 text-sm"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-400 pr-10 shadow-sm focus:outline-none focus:border-sky-400 focus:bg-white/10 transition duration-200 text-sm"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3.5 text-slate-400 hover:text-slate-600 transition"
+                  className="absolute right-3 top-3.5 text-slate-400 hover:text-white transition"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -158,17 +158,17 @@ const Login = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-400 text-white font-bold rounded-xl active:scale-[0.98] transition duration-150 text-sm shadow-[0_4px_12px_rgba(15,23,42,0.15)] cursor-pointer disabled:cursor-not-allowed flex items-center justify-center mt-2"
+              className="w-full py-3 px-4 bg-white hover:bg-slate-100 disabled:bg-white/20 text-[#2B3F43] disabled:text-white/40 font-bold rounded-xl active:scale-[0.99] transition duration-150 text-sm shadow-md cursor-pointer disabled:cursor-not-allowed flex items-center justify-center mt-4"
             >
               {isLoading ? "Verifying Context..." : "Continue to Dashboard"}
             </button>
           </form>
 
           {/* Navigational Anchor Footer */}
-          <div className="mt-8 pt-6 border-t border-slate-200 text-xs sm:text-sm text-slate-500 flex flex-col sm:flex-row gap-2 justify-between items-center">
+          <div className="mt-8 pt-6 border-t border-white/10 text-xs sm:text-sm text-slate-300 flex flex-col sm:flex-row gap-2 justify-between items-center">
             <span>Don’t have an account yet?</span>
-            <Link to="/signup" className="text-blue-600 font-semibold hover:underline">
-              Create developer account
+            <Link to="/signup" className="text-white font-bold hover:underline tracking-tight">
+              Create user account
             </Link>
           </div>
 

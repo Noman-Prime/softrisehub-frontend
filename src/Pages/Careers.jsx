@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Footer from "../Components/Footer";
 
 const Careers = () => {
   const [selectedJob, setSelectedJob] = useState(null);
@@ -62,6 +63,7 @@ const Careers = () => {
   };
 
   return (
+    <>
     <div className="w-full min-h-[100dvh] bg-slate-50 text-slate-900 font-sans antialiased px-4 sm:px-6 lg:px-8 py-20 relative">
       <div className="max-w-4xl mx-auto">
         
@@ -207,6 +209,8 @@ const Careers = () => {
         </div>
       )}
     </div>
+    <Footer />
+    </>
   );
 };
 
