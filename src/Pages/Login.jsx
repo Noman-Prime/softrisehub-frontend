@@ -6,7 +6,7 @@ import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useState(null)
+  const [user, setUser] = useState(null);
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -24,24 +24,24 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const result = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/user/login`, { ...formData }, { withCredentials: true });
+      const result = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/user/login`, formData, { withCredentials: true });
       console.log(result.data.user);
-      if (result.data.user.role === "Admin") {
+
+      const role = result.data.user.role;
+
+      if (role === "Admin") {
         navigate("/admindashboard");
         toast.success("Welcome Admin!");
-      }
-
-      if (result.data.user.role === "Developer") {
+      } else if (role === "Developer") {
         navigate("/");
         toast.success("Welcome Developer!");
-      }
-      if (result.data.user.role === "User") {
-      navigate("/");
-      toast.success("Login Successful!");
+      } else {
+        navigate("/");
+        toast.success("Login Successful!");
       }
 
     } catch (error) {
-      toast.error(error.result.data?.message);
+      toast.error(error.response?.data?.message || "Login Failed");
     }
   };
 
@@ -101,6 +101,7 @@ const Login = () => {
                 <label htmlFor="password" className="block text-xs font-bold text-sky-300 uppercase tracking-wider">
                   Password
                 </label>
+                <Link to="/resetpassword" className="text-xs text-white hover:text-red-400 transition">forget Password?</Link>
               </div>
               <div className="relative">
                 <input
@@ -125,9 +126,9 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-white hover:bg-slate-100 disabled:bg-white/20 text-[#2B3F43] disabled:text-white/40 font-bold rounded-xl active:scale-[0.99] transition duration-150 text-sm shadow-md cursor-pointer disabled:cursor-not-allowed flex items-center justify-center mt-4"
+              className="w-full py-3 px-4 bg-white hover:bg-slate-100 text-[#2B3F43] font-bold rounded-xl active:scale-[0.99] transition duration-150 text-sm shadow-md cursor-pointer flex items-center justify-center mt-4"
             >
-              submit
+              Submit
             </button>
           </form>
 

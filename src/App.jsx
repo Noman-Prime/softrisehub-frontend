@@ -23,6 +23,8 @@ import Footer from "./Components/Footer.jsx";
 import ProductPage from "./Pages/Product.jsx";
 import TeamPage from "./Pages/TeamPage.jsx";
 import ServiceView from "./Components/ServiceView.jsx";
+import ResetPassword from "./Components/ResetPassword.jsx";
+import SetNewPassword from "./Components/SetNewPassword.jsx";
 
 const App = () => {
   return (
@@ -33,6 +35,8 @@ const App = () => {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/resetpassword" element={<ResetPassword />} />
+        <Route path="/reset-password/:token" element={<SetNewPassword />} />
         <Route path="/products" element={<ProductPage/>} />
         <Route path="/services" element={<ServicePage />} />
         <Route path="/projectview/:id" element={<ProjectView />} />

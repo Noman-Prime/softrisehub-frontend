@@ -7,6 +7,7 @@ import Footer from "../Components/Footer.jsx";
 import Products from "../Components/Products.jsx";
 import Toplans from "../Components/Toplans.jsx"
 import Team from "../Components/Team.jsx";
+import SetNewPassword from "../Components/SetNewPassword.jsx";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -27,6 +28,7 @@ const Home = () => {
             <Team />
             <Toplans />
             <Footer />
+            {/* <SetNewPassword /> */}
         </div>
     );
 };
