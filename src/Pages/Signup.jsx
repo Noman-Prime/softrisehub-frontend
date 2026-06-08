@@ -3,14 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
-import { useAuth } from "../Components/AuthContext";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { setUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -30,36 +26,21 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
-
-      const payload = {
-        ...formData,
-        role: "User"
-      };
-
-      const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/v1/user/signup`,
-        payload,
-        { withCredentials: true }
-      );
-
-      if (data?.user) {
-        setUser(data.user);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/user/signup`, { ...formData }, { withCredentials: true });
+      console.log(response.data);
+      if (response.data) {
+        navigate("/");
+        toast.success("Account created successfully!")
       }
-
-      toast.success("Account created successfully!");
-      navigate("/");
-
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Registration Failed");
-    } finally {
-      setLoading(false);
+      console.log(error.response.data?.message);
+      toast.error(error.response.data?.message)
     }
   };
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-slate-50 font-sans antialiased">
-            <div className="hidden lg:flex lg:col-span-5 bg-white border-r border-slate-100 p-12 flex-col justify-between relative overflow-hidden">
+      <div className="hidden lg:flex lg:col-span-5 bg-white border-r border-slate-100 p-12 flex-col justify-between relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.3] pointer-events-none grid grid-cols-3">
           <div className="border-r border-slate-100 h-full"></div>
           <div className="border-r border-slate-100 h-full"></div>
@@ -97,7 +78,7 @@ const Signup = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            
+
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold text-sky-300 uppercase tracking-wider mb-1.5">
@@ -201,10 +182,9 @@ const Signup = () => {
 
             <button
               type="submit"
-              disabled={loading}
               className="w-full py-3 px-4 bg-white hover:bg-slate-100 disabled:bg-white/20 text-[#2B3F43] disabled:text-white/40 font-bold rounded-xl active:scale-[0.99] transition duration-150 text-sm shadow-md cursor-pointer disabled:cursor-not-allowed flex items-center justify-center pt-3"
             >
-              {loading ? "Creating account..." : "Complete Registration"}
+              Creating account...
             </button>
           </form>
 

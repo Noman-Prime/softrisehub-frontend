@@ -1,4 +1,6 @@
 import { Routes, Route } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 import Navbar from "./Components/Navbar.jsx"
 import Home from "./Pages/Home.jsx";
 import Login from "./Pages/Login.jsx";
@@ -25,6 +27,8 @@ import ServiceView from "./Components/ServiceView.jsx";
 const App = () => {
   return (
     <div className="min-h-screen bg-[#050814] text-white">
+      <ToastContainer 
+        position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={true} closeOnClick pauseOnHover />
       <Navbar />
       <ScrollToTop />
       <Routes>

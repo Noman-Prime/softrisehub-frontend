@@ -3,11 +3,10 @@ import { Link } from "react-router-dom";
 import { Menu, User, X } from "lucide-react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useAuth } from "./AuthContext";
 
 const Navbar = () => {
   const [activeMenu, setActiveMenu] = useState(null);
-  const { user, setUser } = useAuth();
+  const { user, setUser } = useState(null);
   const dropdownRef = useRef(null);
   const mobileRef = useRef(null);
 

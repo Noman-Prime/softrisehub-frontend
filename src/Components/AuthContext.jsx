@@ -1,36 +1,30 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
-import axios from "axios";
-
-const AuthContext = createContext(null);
-
-const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    const checkLogin = async () => {
-        try {
-            const result = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/user/me`, { withCredentials: true });
-            if (result.data && result.data.user) {
-                setUser(result.data.user);
-            }
-        } catch (error) {
-            console.log("Not logged in natively:", error);
-            setUser(null);
-        } finally {
-            setLoading(false);
-        }
-    };
+import { createContext, useContext, useEffect, useState } from "react"
+export const TeackerContext = createContext(null)
+export const TrackData = ({ children }) => {
+    const [streamData, setStramData] = useState(null)
 
     useEffect(() => {
-        checkLogin();
-    }, []);
+        const event = new EventSource(`${import.meta.env.VITE_API_URL}/api/v1/stram`, { withCredentials: true })
+        event.onmessage = (e) => {
+            try {
+                setStramData(JSON.parse(e.data))
+            } catch (error) {
+                console.log("Parse are not working", error);
+            }
 
+        }
+        event.onerror = (error) => {
+            console.log("EventSource is not working", error)
+        }
+        return () => {
+            event.close()
+        }
+    }, [])
     return (
-        <AuthContext.Provider value={{ user, setUser, checkLogin, loading }}>
+        <TeackerContext.Provider value={{ streamData }}>
             {children}
-        </AuthContext.Provider>
-    );
-};
+        </TeackerContext.Provider>
+    )
+}
 
-export const useAuth = () => useContext(AuthContext);
-export default AuthProvider;
+export const useTracker = () => useContext(TeackerContext)
