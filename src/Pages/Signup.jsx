@@ -184,7 +184,7 @@ const Signup = () => {
               type="submit"
               className="w-full py-3 px-4 bg-white hover:bg-slate-100 disabled:bg-white/20 text-[#2B3F43] disabled:text-white/40 font-bold rounded-xl active:scale-[0.99] transition duration-150 text-sm shadow-md cursor-pointer disabled:cursor-not-allowed flex items-center justify-center pt-3"
             >
-              Creating account...
+              Submit
             </button>
           </form>
 
