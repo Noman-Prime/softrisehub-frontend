@@ -10,7 +10,6 @@ const Navbar = () => {
   const [user, setUser] = useState(null);
   const navRef = useRef(null);
 
-  // Real-time user updates
   useEffect(() => {
     const updatedData = new EventSource(`${import.meta.env.VITE_API_URL}/api/v1/user/login`, { withCredentials: true });
     updatedData.onmessage = (event) => {
@@ -59,78 +58,64 @@ const Navbar = () => {
   };
 
   return (
-    <nav ref={navRef} className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-[#2B3F43] border-b border-slate-700 shadow-md">
-      <div className="text-2xl font-bold text-white cursor-pointer" onClick={() => navigate("/")}>SoftRise</div>
+    <nav ref={navRef} className="sticky top-0 z-50 flex items-center justify-between px-6 py-2 bg-[#2B3F43] border-b border-slate-700 shadow-md">
+      <div className="text-xl font-bold text-white cursor-pointer transition-all duration-300 hover:text-green-400 hover:drop-shadow-[0_0_8px_rgba(74,222,128,0.6)]" onClick={() => navigate("/")}>SoftRise</div>
 
-      {/* Desktop Links */}
-      <div className="hidden md:flex gap-8 text-white font-medium">
-        <Link to="/" className="hover:text-green-400 transition-colors">Home</Link>
-        <Link to="/products" className="hover:text-green-400 transition-colors">Products</Link>
-        <Link to="/services" className="hover:text-green-400 transition-colors">Services</Link>
-        <Link to="/packages" className="hover:text-green-400 transition-colors">Packages</Link>
-        <Link to="/about" className="hover:text-green-400 transition-colors">About</Link>
-        <Link to="/contact" className="hover:text-green-400 transition-colors">Contact</Link>
+      <div className="hidden md:flex gap-4 text-white text-sm font-medium">
+        <Link to="/" className="px-3 py-1 rounded-[10px] border-2 border-transparent transition-colors hover:font-bold hover:bg-white hover:text-black hover:border-white">Home</Link>
+        <Link to="/products" className="px-3 py-1 rounded-[10px] border-2 border-transparent transition-colors hover:font-bold hover:bg-white hover:text-black hover:border-white">Products</Link>
+        <Link to="/services" className="px-3 py-1 rounded-[10px] border-2 border-transparent transition-colors hover:font-bold hover:bg-white hover:text-black hover:border-white">Services</Link>
+        <Link to="/packages" className="px-3 py-1 rounded-[10px] border-2 border-transparent transition-colors hover:font-bold hover:bg-white hover:text-black hover:border-white">Packages</Link>
+        <Link to="/about" className="px-3 py-1 rounded-[10px] border-2 border-transparent transition-colors hover:font-bold hover:bg-white hover:text-black hover:border-white">About</Link>
+        <Link to="/contact" className="px-3 py-1 rounded-[10px] border-2 border-transparent transition-colors hover:font-bold hover:bg-white hover:text-black hover:border-white">Contact</Link>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div  className="relative flex items-center">
+      <div className="flex items-center gap-3">
+        <div className="relative flex items-center">
           <div className="cursor-pointer hover:opacity-80 transition-opacity" onClick={(e) => { e.stopPropagation(); setShow(!show); setMobileShow(false); }}>
             {user ? (
               user.image?.url ? (
-                <img className="w-8 h-8 rounded-full border border-sky-400 object-cover" src={user.image.url} alt="Profile" />
+                <img className="w-7 h-7 rounded-full border border-sky-400 object-cover" src={user.image.url} alt="Profile" />
               ) : (
-                <div className="w-8 h-8 flex items-center justify-center bg-white text-black text-xs font-bold rounded-full">{user.firstName?.[0]}{user.lastName?.[0]}</div>
+                <div className="w-7 h-7 flex items-center justify-center bg-white text-black text-[10px] font-bold rounded-full">{user.firstName?.[0]}{user.lastName?.[0]}</div>
               )
             ) : (
-              <User className="text-slate-200" size={24} />
+              <div className="p-1.5 border border-transparent transition-all duration-300 hover:border-white rounded-full hover:bg-white cursor-pointer">
+                <User className="text-blue-400 hover:text-black transition-colors" size={20} />
+              </div>
             )}
           </div>
 
-          {/* User Dropdown */}
           {show && (
-            <div className="absolute right-0 top-12 w-48 bg-[#2B3F43] border border-white rounded-[20px] p-3 flex flex-col gap-2 shadow-2xl z-50">
+            <div className="absolute right-0 top-10 w-40 bg-[#2B3F43] border border-white rounded-[15px] p-2 flex flex-col gap-1 shadow-2xl z-50">
               {user ? (
                 <>
-                  <Link className="flex text-black justify-center font-bold bg-white px-1 py-2 rounded-[15px] hover:bg-green-500 transition-colors" to={`/users/${user._id}`} onClick={() => setShow(false)}>{user.firstName} {user.lastName}</Link>
-                  <button className="flex text-black justify-center font-bold bg-white px-1 py-2 rounded-[15px] hover:bg-black hover:text-red-500 transition-colors" onClick={handleLogout}>Logout</button>
+                  <Link className="flex text-black justify-center text-sm font-bold bg-white px-2 py-1.5 rounded-[10px] hover:bg-green-500 transition-colors" to={`/users/${user._id}`} onClick={() => setShow(false)}>{user.firstName} {user.lastName}</Link>
+                  <button className="flex text-black justify-center text-sm font-bold bg-white px-2 py-1.5 rounded-[10px] hover:bg-black hover:text-red-500 transition-colors" onClick={handleLogout}>Logout</button>
                 </>
               ) : (
                 <>
-                  <Link className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px] hover:bg-green-700 transition-colors" to="/login" onClick={() => setShow(false)}>Login</Link>
-                  <Link className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px] hover:bg-green-700 transition-colors" to="/signup" onClick={() => setShow(false)}>Sign Up</Link>
+                  <Link className="block border border-2 bg-white text-black text-sm font-bold text-center py-1.5 rounded-[10px] hover:bg-black hover:text-white hover:border-white transition-colors" to="/login" onClick={() => setShow(false)}>Login</Link>
+                  <Link className="block border border-2 bg-white text-black text-sm font-bold text-center py-1.5 rounded-[10px] hover:bg-black hover:text-white hover:border-white transition-colors" to="/signup" onClick={() => setShow(false)}>Sign Up</Link>
                 </>
               )}
             </div>
           )}
         </div>
 
-        {/* Mobile Hamburger */}
         <div className="md:hidden text-white cursor-pointer" onClick={() => { setMobileShow(!mobileShow); setShow(false); }}>
-          {mobileShow ? <X size={24} /> : <Menu size={24} />}
+          {mobileShow ? <X size={22} /> : <Menu size={22} />}
         </div>
       </div>
 
-      {/* Mobile Drawer */}
       {mobileShow && (
-        <div className="absolute top-[68px] right-0 w-48 bg-[#2B3F43] border border-white rounded-[20px] p-4 flex flex-col gap-2 md:hidden shadow-2xl z-40">
-          <Link to="/" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px]">
-            Home
-          </Link>
-          <Link to="/products" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px]">
-            Products
-          </Link>
-          <Link to="/services" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px]">
-            Services
-          </Link>
-          <Link to="/packages" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px]">
-            Packages
-          </Link>
-          <Link to="/about"  onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px]">
-            About
-          </Link>
-          <Link to="/contact" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px]">
-            Contact
-          </Link>
+        <div className="absolute top-[52px] right-0 w-40 bg-[#2B3F43] border border-white rounded-[15px] p-3 flex flex-col gap-2 md:hidden shadow-2xl z-40">
+          <Link to="/" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black text-sm font-bold text-center py-1.5 rounded-[10px]">Home</Link>
+          <Link to="/products" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black text-sm font-bold text-center py-1.5 rounded-[10px]">Products</Link>
+          <Link to="/services" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black text-sm font-bold text-center py-1.5 rounded-[10px]">Services</Link>
+          <Link to="/packages" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black text-sm font-bold text-center py-1.5 rounded-[10px]">Packages</Link>
+          <Link to="/about" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black text-sm font-bold text-center py-1.5 rounded-[10px]">About</Link>
+          <Link to="/contact" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black text-sm font-bold text-center py-1.5 rounded-[10px]">Contact</Link>
         </div>
       )}
     </nav>

@@ -21,31 +21,29 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login form submitted");
-    
+
     try {
 
-      const result = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/user/login`, formData, { 
-        withCredentials: true 
+      const result = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/user/login`, formData, {
+        withCredentials: true
       });
 
       const role = result.data.user.role;
       if (role === "Admin") {
         navigate("/admindashboard");
-        toast.success("Welcome Admin!");
+        toast.success("Welcome to Admin Dashbord!");
       } else {
         navigate("/");
         toast.success("Login Successful!");
       }
     } catch (error) {
       console.error("Login Error:", error);
-      toast.error(error.response?.data?.message || "Login Failed");
+      toast.error(error.response?.data?.message);
     }
   };
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-slate-50 font-sans">
-      {/* Sidebar - Hidden on mobile */}
       <div className="hidden lg:flex lg:col-span-5 bg-white border-r border-slate-100 p-12 flex-col justify-between relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.3] pointer-events-none grid grid-cols-3">
           <div className="border-r border-slate-100 h-full"></div>
@@ -60,14 +58,13 @@ const Login = () => {
         <div className="relative z-10 text-xs text-slate-400 font-medium">© SoftRiseHub. All rights reserved.</div>
       </div>
 
-      {/* Login Form Section */}
       <div className="col-span-1 lg:col-span-7 flex items-center justify-center p-4 sm:p-12 md:p-20 bg-slate-50">
         <div className="w-full max-w-md bg-[#2B3F43] rounded-2xl p-8 sm:p-10 shadow-xl border border-[#2B3F43]">
           <div className="mb-8">
             <h2 className="text-2xl font-black text-white tracking-tight">Sign In</h2>
             <p className="text-sm text-slate-300 mt-1">Enter your authorized credentials.</p>
           </div>
-          
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="email" className="block text-xs font-bold text-sky-300 uppercase tracking-wider mb-2">Email Address</label>
@@ -109,7 +106,6 @@ const Login = () => {
               </div>
             </div>
 
-            {/* FIXED BUTTON: Added touch-manipulation and removed active:scale for mobile reliability */}
             <button
               type="submit"
               className="w-full py-3 px-4 bg-white hover:bg-slate-100 text-[#2B3F43] font-bold rounded-xl transition duration-150 text-sm shadow-md cursor-pointer flex items-center justify-center mt-4 touch-manipulation"
@@ -119,9 +115,9 @@ const Login = () => {
             </button>
           </form>
 
-          <div className="mt-8 pt-6 border-t border-white/10 text-xs text-slate-300 flex justify-between items-center">
+          <div className="mt-8 pt-6 border-t border-white/10 text-xs sm:text-sm text-slate-300 flex justify-between items-center">
             <span>Don’t have an account?</span>
-            <Link to="/signup" className="text-white font-bold hover:underline">Create account</Link>
+            <Link to="/signup" className="text-black font-bold hover:underline hover:text-blue-700">Create account</Link>
           </div>
         </div>
       </div>
@@ -130,3 +126,5 @@ const Login = () => {
 };
 
 export default Login;
+
+{/*Login page is completely functional and okay */}

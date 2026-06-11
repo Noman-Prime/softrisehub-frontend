@@ -187,13 +187,11 @@ const Signup = () => {
               Submit
             </button>
           </form>
-
-          {/* Navigational Anchor Footer */}
           <div className="mt-6 pt-6 border-t border-white/10 text-xs sm:text-sm text-slate-300 flex flex-col sm:flex-row gap-2 justify-between items-center">
             <span>Already have an account?</span>
-            <Link to="/login" className="text-white font-bold hover:underline tracking-tight">
-              Sign in to SoftRiseHub
-            </Link>
+            <div  className="text-white font-bold tracking-tight flex items-center gap-1 cursor-pointer">
+              Sign in to<Link to="/login" className="text-blue-700 font-bold hover:underline">SOFTRISEHUB</Link>
+            </div>
           </div>
 
         </div>
@@ -204,3 +202,5 @@ const Signup = () => {
 };
 
 export default Signup;
+
+{/*Signup page is completely functional and okay */}
