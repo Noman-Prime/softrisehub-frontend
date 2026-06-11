@@ -7,7 +7,6 @@ import { Eye, EyeOff } from "lucide-react";
 const SetNewPassword = () => {
     const navigate = useNavigate()
     const { token } = useParams();
-    console.log("Current Token", token);
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         newPassword: "",
@@ -23,14 +22,15 @@ const SetNewPassword = () => {
 
     const Submit = async (e) => {
         e.preventDefault();
+        setShowPassword(!showPassword)
         try {
-            const result = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/user/password/reset/${token}`, formData, { withCredentials: true });
-            console.log(result.data);
-            if (result.data) {
-                toast.success("Password updated successfully!");
+            const result = await axios.put(`${import.meta.env.VITE_API_URL}/api/v1/user/reset-password/${token}`, formData, { withCredentials: true });
+            if(result.data){
+                navigate("/")
+                toast.success("You password is Updated")
             }
         } catch (error) {
-            toast.error(error.response.data?.message);
+            toast.error("request is not being send: ",error);
         }
     };
 

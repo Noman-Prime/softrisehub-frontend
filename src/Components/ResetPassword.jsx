@@ -4,23 +4,27 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const ResetPassword = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
 
     const Submit = async (e) => {
-        e.preventDefault(); 
-        
+        if (e) e.preventDefault();
+
         try {
-            const result = await axios.post( `${import.meta.env.VITE_API_URL}/api/v1/user/password/reset/request`, { email }, { withCredentials: true });
-            console.log(result.data.message);
+            const result = await axios.post(
+                `${import.meta.env.VITE_API_URL}/api/v1/user/password/reset/request`,
+                {"email": email},
+                { withCredentials: true }
+            );
+            console.log(result.data);
             
             if (result.data) {
-                navigate("/")
+                // navigate("/");
                 toast.success("Password Reset Link has been sent to your email!");
             }
         } catch (error) {
-            console.log("No account is found")
-            toast.error("No account is found")
+            console.log("No account is found");
+            toast.error("No account is found");
         }
     };
 
@@ -30,11 +34,20 @@ const ResetPassword = () => {
                 <h3 className="text-xl font-bold text-white text-center">
                     Enter your Registered Email
                 </h3>
-                <input 
+
+                <input
                     className="w-full p-3 border border-white rounded-[15px] focus:outline-none bg-white text-black font-semibold"
-                    placeholder="sample@gmail.com" type="email" value={email} onChange={(e) => setEmail(e.target.value)}  />
-                <button onClick={Submit} className="w-full bg-white text-[#2B3F43] py-3 rounded-[15px] font-bold hover:bg-green-500 hover:text-white transition duration-200"> 
-                    Submit 
+                    placeholder="sample@gmail.com"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+
+                <button
+                    onClick={Submit}
+                    className="w-full bg-white text-[#2B3F43] py-3 rounded-[15px] font-bold hover:bg-green-500 hover:text-white transition duration-200 touch-ready" style={{ WebkitTapHighlightColor: 'transparent' }}
+                >
+                    Submit
                 </button>
             </div>
         </div>

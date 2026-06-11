@@ -11,7 +11,6 @@ const Team = () => {
       const result = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/user/admin/users`, { withCredentials: true });
       setTeam(result.data.users);
       const user = result.data.users
-      console.log(user);
     } catch (error) {
       console.error(error);
     }
