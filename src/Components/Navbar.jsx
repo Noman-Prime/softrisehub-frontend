@@ -11,25 +11,33 @@ const Navbar = () => {
   const navRef = useRef(null);
 
   useEffect(() => {
-    const updatedData = new EventSource(`${import.meta.env.VITE_API_URL}/api/v1/user/login`, { withCredentials: true });
-    updatedData.onmessage = (event) => {
+    const data = new EventSource(`${import.meta.env.VITE_API_URL}/api/v1/user/me`, { withCredentials: true });
+    console.log("Raw SSE data: ", data);
+    data.onmessage = (event) => {
+      console.log("Raw SSE Data 2: ", event.data);
       try {
         const result = JSON.parse(event.data);
-        if (result && result.user) setUser(result.user);
+        console.log(result)
+        if (result && result.updatedData) {
+          setUser(result.updatedData);
+        }
       } catch (error) {
         console.log("Parse is not working", error);
       }
     };
-    updatedData.onerror = (error) => {
+    data.onerror = (error) => {
       console.log("updatedData is not working: ", error);
     };
-    return () => updatedData.close();
+
+    return () => data.close();
   }, []);
 
   const checkLogin = async () => {
     try {
       const result = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/user/me`, { withCredentials: true });
-      if (result.data) setUser(result.data.user);
+      if (result.data) {
+        setUser(result.data.user);
+      }
     } catch (error) {
       console.log(error.response?.data?.error);
     }
