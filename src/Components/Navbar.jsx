@@ -10,15 +10,13 @@ const Navbar = () => {
   const [user, setUser] = useState(null);
   const navRef = useRef(null);
 
-  // Restored your original EventSource logic
+  // Real-time user updates
   useEffect(() => {
     const updatedData = new EventSource(`${import.meta.env.VITE_API_URL}/api/v1/user/login`, { withCredentials: true });
     updatedData.onmessage = (event) => {
       try {
         const result = JSON.parse(event.data);
-        if (result && result.user) {
-          setUser(result.user);
-        }
+        if (result && result.user) setUser(result.user);
       } catch (error) {
         console.log("Parse is not working", error);
       }
@@ -26,9 +24,7 @@ const Navbar = () => {
     updatedData.onerror = (error) => {
       console.log("updatedData is not working: ", error);
     };
-    return () => {
-      updatedData.close();
-    };
+    return () => updatedData.close();
   }, []);
 
   const checkLogin = async () => {
@@ -62,23 +58,22 @@ const Navbar = () => {
     }
   };
 
-  const PageLinks = [
-    <Link to="/" key="home" className="hover:text-green-400 transition-colors">Home</Link>,
-    <Link to="/products" key="products" className="hover:text-green-400 transition-colors">Products</Link>,
-    <Link to="/services" key="services" className="hover:text-green-400 transition-colors">Services</Link>,
-    <Link to="/packages" key="packages" className="hover:text-green-400 transition-colors">Packages</Link>,
-    <Link to="/about" key="about" className="hover:text-green-400 transition-colors">About</Link>,
-    <Link to="/contact" key="contact" className="hover:text-green-400 transition-colors">Contact</Link>,
-  ];
-
   return (
-    <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-[#2B3F43] border-b border-slate-700 shadow-md">
+    <nav ref={navRef} className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-[#2B3F43] border-b border-slate-700 shadow-md">
       <div className="text-2xl font-bold text-white cursor-pointer" onClick={() => navigate("/")}>SoftRise</div>
 
-      <div className="hidden md:flex gap-8 text-white font-medium">{PageLinks}</div>
+      {/* Desktop Links */}
+      <div className="hidden md:flex gap-8 text-white font-medium">
+        <Link to="/" className="hover:text-green-400 transition-colors">Home</Link>
+        <Link to="/products" className="hover:text-green-400 transition-colors">Products</Link>
+        <Link to="/services" className="hover:text-green-400 transition-colors">Services</Link>
+        <Link to="/packages" className="hover:text-green-400 transition-colors">Packages</Link>
+        <Link to="/about" className="hover:text-green-400 transition-colors">About</Link>
+        <Link to="/contact" className="hover:text-green-400 transition-colors">Contact</Link>
+      </div>
 
       <div className="flex items-center gap-4">
-        <div ref={navRef} className="relative flex items-center">
+        <div  className="relative flex items-center">
           <div className="cursor-pointer hover:opacity-80 transition-opacity" onClick={(e) => { e.stopPropagation(); setShow(!show); setMobileShow(false); }}>
             {user ? (
               user.image?.url ? (
@@ -91,6 +86,7 @@ const Navbar = () => {
             )}
           </div>
 
+          {/* User Dropdown */}
           {show && (
             <div className="absolute right-0 top-12 w-48 bg-[#2B3F43] border border-white rounded-[20px] p-3 flex flex-col gap-2 shadow-2xl z-50">
               {user ? (
@@ -100,32 +96,41 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <Link className="bg-black text-white text-center py-2 rounded-[15px] hover:bg-green-700 transition-colors" to="/login" onClick={() => setShow(false)}>Login</Link>
-                  <Link className="bg-black text-white text-center py-2 rounded-[15px] hover:bg-green-700 transition-colors" to="/signup" onClick={() => setShow(false)}>Sign Up</Link>
+                  <Link className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px] hover:bg-green-700 transition-colors" to="/login" onClick={() => setShow(false)}>Login</Link>
+                  <Link className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px] hover:bg-green-700 transition-colors" to="/signup" onClick={() => setShow(false)}>Sign Up</Link>
                 </>
               )}
             </div>
           )}
         </div>
 
+        {/* Mobile Hamburger */}
         <div className="md:hidden text-white cursor-pointer" onClick={() => { setMobileShow(!mobileShow); setShow(false); }}>
           {mobileShow ? <X size={24} /> : <Menu size={24} />}
         </div>
       </div>
 
+      {/* Mobile Drawer */}
       {mobileShow && (
-        <div 
-          className="absolute top-[68px] right-0 w-48 bg-[#2B3F43] border border-white rounded-[20px] p-4 flex flex-col gap-2 md:hidden shadow-2xl z-40" 
-          onClick={() => setMobileShow(false)}
-        >
-          {PageLinks.map((link, index) => (
-            <div
-              key={index}
-              className="block bg-white font-bold text-black text-center py-2 rounded-[15px] hover:bg-green-700 hover:text-white transition-colors"
-            >
-              {link}
-            </div>
-          ))}
+        <div className="absolute top-[68px] right-0 w-48 bg-[#2B3F43] border border-white rounded-[20px] p-4 flex flex-col gap-2 md:hidden shadow-2xl z-40">
+          <Link to="/" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px]">
+            Home
+          </Link>
+          <Link to="/products" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px]">
+            Products
+          </Link>
+          <Link to="/services" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px]">
+            Services
+          </Link>
+          <Link to="/packages" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px]">
+            Packages
+          </Link>
+          <Link to="/about"  onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px]">
+            About
+          </Link>
+          <Link to="/contact" onClick={() => setMobileShow(false)} className="block border border-2 bg-white text-black font-bold text-center py-2 rounded-[15px]">
+            Contact
+          </Link>
         </div>
       )}
     </nav>
