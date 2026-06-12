@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
+import { useEffect } from "react";
+import { useAuth } from "../utils/userAuth";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,6 +13,8 @@ const Login = () => {
     email: "",
     password: ""
   });
+
+  const { setUser } = useAuth()
 
   const handleChange = (e) => {
     setFormData({
@@ -27,8 +31,9 @@ const Login = () => {
       const result = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/user/login`, formData, {
         withCredentials: true
       });
-
-      const role = result.data.user.role;
+      const loggedIn = result.data.user
+      setUser(loggedIn)
+      const role = loggedIn.role;
       if (role === "Admin") {
         navigate("/admindashboard");
         toast.success("Welcome to Admin Dashbord!");
@@ -127,4 +132,4 @@ const Login = () => {
 
 export default Login;
 
-{/*Login page is completely functional and okay */}
+{/*Login page is completely functional and okay */ }

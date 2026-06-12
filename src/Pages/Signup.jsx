@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
+import { useAuth } from "../utils/userAuth";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -16,6 +17,8 @@ const Signup = () => {
     country: ""
   });
 
+  const { setUser } = useAuth()
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -27,7 +30,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/user/signup`, { ...formData }, { withCredentials: true });
-      console.log(response.data);
+      setUser(response.data.user);
       if (response.data) {
         navigate("/");
         toast.success("Account created successfully!")
