@@ -53,7 +53,10 @@ const Navbar = () => {
               user.image?.url ? (
                 <img className="w-7 h-7 rounded-full border border-sky-400 object-cover" src={user.image.url} alt="Profile" />
               ) : (
-                <div className="w-7 h-7 flex items-center justify-center bg-white text-black text-xs font-bold rounded-full">{user.firstName?.[0]}{user.lastName?.[0]}</div>
+                <div className="w-7 h-7 flex items-center justify-center bg-white text-black text-[12px] font-bold rounded-full select-none">
+                  {user.firstName?.[0]}
+                  {user.lastName?.[0]}
+                </div>
               )
             ) : (
               <User className="text-blue-400" size={24} />
