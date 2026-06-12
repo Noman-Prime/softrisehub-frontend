@@ -46,7 +46,7 @@ const Navbar = () => {
         ))}
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center">
         <div className="relative">
           <div className="cursor-pointer" onClick={(e) => { e.stopPropagation(); setShow(!show); setMobileShow(false); }}>
             {user ? (
